@@ -1,0 +1,56 @@
+
+= form_for @user do |f|
+  - if @user.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@user.errors.count, "error")} impiden que el usuario sea guardado:"
+      %ul
+        - @user.errors.full_messages.each do |message|
+          %li= message
+
+  - if current_user and current_user.admin?
+    .form-group
+      = radio_button_tag '[user]role', :student, false, required: true
+      Estudiante
+      = radio_button_tag '[user]role', :admin, false, required: true
+      Administrador
+  - else
+    = hidden_field_tag :registro, true
+
+  .form-group
+    = f.label :id, value: 'Cédula:'
+    = f.text_field :id, class: 'form-control ci', required: true, placeholder: 'Cédula de Identidad', autofocus: true
+  .form-group
+    = f.label :name, value: 'Nombres'
+    = f.text_field :name, class: 'form-control upcase', placeholder: 'Nombre Completo', required: true
+  .form-group
+    = f.label :full_name, value: 'Apellidos'
+    = f.text_field :full_name, class: 'form-control upcase', placeholder: 'Apellidos', required: true
+  .form-group
+    = f.label :email, value: 'Correo'
+    = f.email_field :email, class: 'form-control', placeholder:'Correo electrónico', required: true
+  .form-group
+    = f.label :phone, value: 'Teléfono'
+    = f.phone_field :phone, class: 'form-control ci', placeholder: 'Número Telefónico', required: true
+  .form-group
+    = f.label :password, value: 'Contraseña'
+    = f.password_field :password, class: 'form-control', required: true
+  .form-group
+    = f.label :password_confirmation, value: 'Confirmacion de Contraseña:'
+    = f.password_field :password_confirmation, class: 'form-control', required: true
+  .actions
+    = f.submit 'Guardar', class: 'btn btn-primary btn-sm'
+    = link_to 'Cancelar', root_path, class: 'btn btn-sm btn-white pull-right'
+
+
+:javascript
+
+  $('.upcase').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().toUpperCase());
+  });
+
+
+  $('.ci').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().replace(/[^0-9]/g,'') );
+    });

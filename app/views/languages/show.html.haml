@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Id:
+  = @language.id
+%p
+  %b Description:
+  = @language.description
+
+= link_to 'Edit', edit_language_path(@language)
+\|
+= link_to 'Back', languages_path

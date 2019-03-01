@@ -1,0 +1,21 @@
+.text-center.loginscreen.animated.fadeInDown
+
+  %h1.logo-name EIM
+  %h3 Escuela de Idiomas Modernos
+  %h4 UNIVERSIDAD CENTRAL DE VENEZUELA
+
+  = form_tag( home_authenticate_path, class: "form-horizontal m-t") do
+    .form-group
+      %label Cédula:
+      = text_field_tag "[user]id", nil, {class: 'form-control ci', required: true, placeholder: 'Cédula de Identidad', autofocus: true}
+    .form-group
+      %label Contraseña
+      = password_field_tag "[user]password", nil, {class: 'form-control', required: true}
+
+    .form-group
+      %button.btn.btn-primary.block.full-width.m-b{:type => "submit"} Entrar
+    %a{:href => "#"}
+      %small ¿Olvidó Contraseña?
+    %p.text-muted.text-center
+      %small ¿No está registrado?
+    %a.btn.btn-sm.btn-white.btn-block{href: new_user_path} Regístrese

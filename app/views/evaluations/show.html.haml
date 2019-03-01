@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Start:
+  = @evaluation.start
+%p
+  %b End:
+  = @evaluation.end
+%p
+  %b Location:
+  = @evaluation.location
+%p
+  %b Lenguage:
+  = @evaluation.lenguage
+%p
+  %b Type:
+  = @evaluation.type
+
+= link_to 'Edit', edit_evaluation_path(@evaluation)
+\|
+= link_to 'Back', evaluations_path

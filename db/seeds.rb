@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+  Language.create([{ id: 'ALE', description: 'Alemán' },{ id: 'FRA', description: 'Francés' }, { id: 'ITA', description: 'Italiano' }, { id: 'ING', description: 'Inglés' }, { id: 'PTG', description: 'Portugués' }])
+
+  p "Total de Idiomas creados: #{Language.count}"
