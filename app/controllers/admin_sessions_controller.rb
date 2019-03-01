@@ -4,6 +4,6 @@ class AdminSessionsController < ApplicationController
   end
 
   def evaluation_record
-    @
+
   end
 end

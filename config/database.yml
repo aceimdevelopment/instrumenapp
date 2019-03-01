@@ -52,6 +52,8 @@ test:
 #
 production:
   # <<: *default
-  database: instrumenapp_production
-  username: instrumenapp
-  password: <%= ENV['INSTRUMENAPP_DATABASE_PASSWORD'] %>
+  adapter: mysql2
+  database: instrumenapp_development
+  username: root
+  password: d15573230
+

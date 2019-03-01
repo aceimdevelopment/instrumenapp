@@ -23,7 +23,7 @@
         %td= user.email
         %td= user.phone
         %td= user.password
-        %td= user.type
+        %td= user.role
         %td= link_to 'Show', user
         %td= link_to 'Edit', edit_user_path(user)
         %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
