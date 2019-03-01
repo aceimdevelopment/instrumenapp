@@ -53,7 +53,7 @@ test:
 production:
   # <<: *default
   adapter: mysql2
-  database: instrumenapp_development
+  database: instrumenapp_production
   username: root
-  password: d15573230
+  password: 123123
 
