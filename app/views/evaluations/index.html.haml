@@ -1,29 +1,21 @@
-%h1 Listing evaluations
-
-%table
-  %thead
-    %tr
-      %th Start
-      %th End
-      %th Location
-      %th Lenguage
-      %th Type
-      %th
-      %th
-      %th
-
-  %tbody
-    - @evaluations.each do |evaluation|
-      %tr
-        %td= evaluation.start
-        %td= evaluation.end
-        %td= evaluation.location
-        %td= evaluation.lenguage
-        %td= evaluation.type_evaluation
-        %td= link_to 'Show', evaluation
-        %td= link_to 'Edit', edit_evaluation_path(evaluation)
-        %td= link_to 'Destroy', evaluation, method: :delete, data: { confirm: 'Are you sure?' }
-
+%h1
+  %i.fa.fa-graduation-cap
+  Cursos y Pruebas
+.tabs-container
+  %ul.nav.nav-tabs{role: "tablist"}
+    %li
+      %a.nav-link{"data-toggle": :tab, href: "#tests"}
+        %i.fa.fa-shower
+        Pruebas
+    %li
+      %a.nav-link{"data-toggle": :tab, href: "#courses"} 
+        %i.fa.fa-bath
+        Cursos
+  .tab-content
+    #tests.tab-pane{role: :tabpanel}
+      .panel-body
+        = render partial: '/evaluations/list', locals: {evaluations: @tests, type: 'Prueba'}
+    #courses.tab-pane{role: :tabpanel}
+      .panel-body
+        = render partial: '/evaluations/list', locals: {evaluations: @courses, type: 'Curso'}
 %br
-
-= link_to 'New Evaluation', new_evaluation_path

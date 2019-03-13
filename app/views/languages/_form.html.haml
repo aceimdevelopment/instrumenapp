@@ -1,16 +1,19 @@
 = form_for @language do |f|
-  - if @language.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@language.errors.count, "error")} prohibited this language from being saved:"
-      %ul
-        - @language.errors.full_messages.each do |message|
-          %li= message
 
-  .field
-    = f.label :id
-    = f.text_field :id
-  .field
-    = f.label :description
-    = f.text_field :description
+  .form-group
+    = f.label :id, value: 'Identificador:'
+    = f.text_field :id, class: 'form-control upcase', placeholder: 'Identificador...', autofocus: true, maxlength: 4
+
+  .form-group
+    = f.label :description, value: 'Descripción:'
+    = f.text_field :description, class: 'form-control', required: true, placeholder: 'Descripción...'
   .actions
-    = f.submit 'Save'
+    = link_to 'Cancelar', languages_path, class: 'btn btn-sm btn-default'
+    = f.submit 'Guardar', class: 'btn btn-sm btn-primary'
+
+:javascript
+  $('.upcase').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().toUpperCase());
+    node.val(node.val().replace(/[^A-Z0-9]/g,'') );
+    });

@@ -1,0 +1,67 @@
+%h1
+  %i.fa.fa-cubes
+  Áreas
+
+%table.table.table-striped.table-sm.table-hover
+  %thead
+    %tr
+      %th Description
+      %th
+      %th
+
+  %tbody
+    - @areas.each do |area|
+      %tr
+        %td= area.description
+        %td
+          = link_to 'javascript:void(0)', onclick: "change_form('#{area_path(area)}', '#{area.description}', 'true');", class: 'tooltip-btn float-left mr-md-3 btn btn-sm btn-outline-success', 'data_toggle': :tooltip, title: 'Editar área' do
+            %i.fa.fa-pencil
+
+          =# link_to edit_area_path(area) do
+
+        %td
+          - total = area.evaluations.count 
+          - if total > 0
+            %b= total
+          - else
+            = link_to area, method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+              %i.fa.fa-trash.text-danger
+
+%br
+
+= link_to "#modal-area", class: 'btn btn-primary btn-sm', "data-toggle": :modal, onclick: "change_form('#{areas_path}')" do
+  %i.fa.fa-plus
+  Área
+
+
+#modal-area.modal.fade{"aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×      
+        %h4#area_titulo.text-center
+          Nueva Área
+      .modal-body
+        - @area = Area.new
+        = render '/areas/form'
+
+:javascript
+
+  function change_form(url, descr='', edit='false'){
+    var form_area = $('#new_area');
+    form_area.attr("action", url);
+    if (edit == 'true') {
+      $('#area_description').val(descr);
+      form_area.append("<input type='hidden' name='_method' value='patch' id='inputEdit'>");
+      $('#area_titulo').html('Editar Area de ' + descr);
+      $('#modal-area').modal();
+    }else{
+      $('#area_titulo').html('Nueva Área');
+      $('#area_description').val('');
+      $('#inputEdit').val('');
+      $('#inputEdit').attr('name', '');
+    }
+
+  }

@@ -1,11 +1,12 @@
-%h1 Listing languages
+%h1 
+  %i.fa.fa-language
+  Idiomas
 
-%table
+%table.table.table-striped.table-sm.table-hover
   %thead
     %tr
       %th Id
-      %th Description
-      %th
+      %th Descripción
       %th
       %th
 
@@ -14,10 +15,19 @@
       %tr
         %td= language.id
         %td= language.description
-        %td= link_to 'Show', language
-        %td= link_to 'Edit', edit_language_path(language)
-        %td= link_to 'Destroy', language, method: :delete, data: { confirm: 'Are you sure?' }
-
+        %td
+          = link_to edit_language_path(language) do
+            %i.fa.fa-pencil
+        %td
+          - total = language.evaluations.count
+          - if total > 0
+            %b.tooltip-btn.tooltip-demo{ 'data_toggle': :tooltip, title: 'Total Cursos y/o Pruebas'}
+              = total
+          - else
+            = link_to language, method: :delete, data: { confirm: 'Esta acción es irrevarsible, ¿Está seguro?' }, class: 'text-danger' do
+              %i.fa.fa-trash
 %br
 
-= link_to 'New Language', new_language_path
+= link_to new_language_path, class: 'btn btn-sm btn-primary' do
+  %i.fa.fa-plus
+  Nuevo Idioma

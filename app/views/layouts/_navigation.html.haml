@@ -6,20 +6,31 @@
           %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
             %span.clear
               %span.block.m-t-xs
-                %strong.font-bold Example user
+                %strong.font-bold= current_user.name.titleize
               %span.text-muted.text-xs.block
-                Example menu
+                Opciones
                 %b.caret
           %ul.dropdown-menu.animated.fadeInRight.m-t-xs
             %li
-              %a{:href => "#"} Logout
+              %a{href: logout_home_path} Salir
         .logo-element
-          IN+
-      %li{:class => "#{'active' if current_page?('/')}"}
-        = link_to "/" do
-          %i.fa.fa-laptop
-          %span.nav-label Main page
-      %li{:class => "#{'active' if current_page?('/home/minor')}"}
-        = link_to "/home/minor" do
-          %i.fa.fa-desktop
-          %span.nav-label Minor page
+          INS+
+      - if current_user.is_admin?
+        %li{:class => "#{'active' if controller_name.eql? ('admins_session') or controller_name.eql? ('students_session') }"}
+          - start_path = current_user.is_admin? ? admins_session_path : students_session_path
+          = link_to start_path do
+            %i.fa.fa-laptop
+            %span.nav-label Principal
+
+        %li{:class => "#{'active' if controller_name.eql? ('evaluations') }"}
+          = link_to evaluations_path do
+            %i.fa.fa-graduation-cap
+            %span.nav-label Cursos/Pruebas
+        %li{:class => "#{'active' if controller_name.eql? ('areas') }"}
+          = link_to areas_path do
+            %i.fa.fa-cubes
+            %span.nav-label Areas
+        %li{:class => "#{'active' if controller_name.eql? ('language') }"}
+          = link_to languages_path do
+            %i.fa.fa-language
+            %span.nav-label Idiomas

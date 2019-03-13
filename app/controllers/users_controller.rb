@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
-  layout 'visitors', only: [:new]
+  layout 'visitors', only: [:evaluation]
   # GET /users
   # GET /users.json
   def index
@@ -22,25 +22,78 @@ class UsersController < ApplicationController
   def edit
   end
 
+  def evaluation
+    if params[:id]
+      @user = User.where(id: params[:id]).first
+      @disabled = true
+    else
+      @user = User.new
+      @disabled = false
+    end
+
+    if params[:test]
+      @evaluations = Test.abierto
+      @eva_title = "Pruebas"
+    elsif params[:course]
+      @eva_title = "Cursos"
+      @evaluations = Course.abierto
+    else
+      @evaluations = Evaluation.abierto
+      @eva_title = "Evaluaciones"
+    end
+    @eva_title += " Disponibles"
+  end
+
+
+  def record_in_evaluation
+
+    @user = Student.where(id: user_params[:id]).first
+    @user = Student.new(user_params) unless @user
+    if @user.save
+      flash[:success] = 'Usuario registrado'
+      if params[:evaluation_id]
+        # t = Record.new
+        # t.evaluation_id = params[:evaluation_id]
+        # t.user_id = @user.id
+
+        if @user.records.create(evaluation_id: params[:evaluation_id]) #t.save
+          flash[:success] += ' y preinscrito con éxito.'
+          if current_user and current_user.admin?
+            redirect_to @user
+          else
+            session[:user_id] = @user.id
+            redirect_to students_session_path
+          end
+        else
+          flash[:danger] = t.errors.full_messages.to_sentence
+          redirect_to fallback_location: "#{users_evaluation_path}?id=#{user_params[:id]}"
+        end
+      end
+    else
+      flash[:danger] = "Error: #{@user.errors.full_messages.to_sentence}"
+      redirect_back fallback_location: "#{users_evaluation_path}?id=#{user_params[:id]}"
+    end
+
+    
+  end
+
   # POST /users
   # POST /users.json
   def create
     @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        flash[:success] = 'Usuario registrado'
-        format.html { 
-          if current_user and current_user.admin?
-            redirect_to @user
-          else
-            redirect_to user_sessions_path
-          end
-        }
-        format.json { render :show, status: :created, location: @user }
+    if @user.save
+      flash[:success] = 'Usuario registrado'
+      if current_user and current_user.admin?
+        redirect_to @user
       else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        redirect_to root_path
+      end
+    else
+      flash[:danger] = @user.errors.full_messages.to_sentence
+      if current_user and current_user.admin?
+        render :new
+      else
+        redirect_to root_path
       end
     end
   end
@@ -77,6 +130,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:id, :name, :full_name, :email, :phone, :password, :role, :password_confirmation)
+      params.require(:user).permit(:id, :name, :last_name, :email, :phone, :password, :role, :password_confirmation)
     end
 end

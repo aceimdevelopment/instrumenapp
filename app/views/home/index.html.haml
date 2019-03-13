@@ -1,9 +1,27 @@
-.animated.fadeInRight
-  .row
-    .col-lg-12
-      .text-center.m-t-lg
-        %h1= @mainTitle
-        %small
-          = @mainDesc
+.border.m-1
+  .border.m-1.p-1
+    .animated.fadeInRight
+      .row
+        .col-lg-12
+          .text-center.m-t-lg
+            %h1= @mainTitle
+            %small
+              = @mainDesc
+  .p-3
+    = inscriptions_buttons
 
-.middle-box{style: 'padding-bottom: 40px;'}= render '/home/login'
+    %hr
+    .text-center
+      = link_to "#newUserSession", class: 'btn btn-primary btn-block', "data-toggle": :modal do
+        %i.fa.fa-paper-plane
+        Ingresar
+      = link_to '#' do
+        %small ¿Olvidaste la contraseña?
+
+
+.middle-box.p-b-4= render '/home/login'
+
+%br
+%br
+%br
+

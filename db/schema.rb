@@ -10,17 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_01_164149) do
+ActiveRecord::Schema.define(version: 2019_03_08_152305) do
+
+  create_table "areas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "evaluations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "start", null: false
     t.datetime "end"
     t.string "location"
     t.string "language_id", null: false
-    t.integer "type_evaluation", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["language_id", "type_evaluation", "start"], name: "index_evaluations_on_language_id_and_type_evaluation_and_start", unique: true
+    t.string "type", null: false
+    t.bigint "area_id"
+    t.integer "state", default: 0
+    t.index ["area_id"], name: "index_evaluations_on_area_id"
+    t.index ["language_id", "start"], name: "index_evaluations_on_language_id_and_type_evaluation_and_start", unique: true
     t.index ["language_id"], name: "index_evaluations_on_language_id"
   end
 
@@ -43,16 +52,17 @@ ActiveRecord::Schema.define(version: 2019_03_01_164149) do
 
   create_table "users", id: :string, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
-    t.string "full_name"
+    t.string "last_name"
     t.string "email", null: false
     t.string "phone"
     t.string "password", null: false
-    t.integer "role", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type", null: false
     t.index ["id"], name: "index_users_on_id"
   end
 
+  add_foreign_key "evaluations", "areas", on_update: :cascade, on_delete: :cascade
   add_foreign_key "evaluations", "languages", on_update: :cascade, on_delete: :cascade
   add_foreign_key "records", "evaluations", on_update: :cascade, on_delete: :cascade
   add_foreign_key "records", "users", on_update: :cascade, on_delete: :cascade

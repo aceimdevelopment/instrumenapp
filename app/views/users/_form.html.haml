@@ -1,11 +1,13 @@
 
 = form_for @user do |f|
-  - if @user.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@user.errors.count, "error")} impiden que el usuario sea guardado:"
-      %ul
-        - @user.errors.full_messages.each do |message|
-          %li= message
+
+  - if params[:test]
+    .form-group
+      %label Pruebas Disponibles:
+      =# text_field_tag :test, nil, class: 'form-control', required: true, placeholder: 'Test'
+      = collection_select nil, :evaluation_id, Test.abierto, :id, :description, {prompt: "Pruebas Disponibles..."}, { class: 'form-control', required: true}
+  - elsif params[:course]
+    = collection_select nil, :evaluation_id, Course.abierto, :id, :description, {prompt: "Pruebas Disponibles..."}, { class: 'form-control', required: true}
 
   - if current_user and current_user.admin?
     .form-group
@@ -21,10 +23,10 @@
     = f.text_field :id, class: 'form-control ci', required: true, placeholder: 'Cédula de Identidad', autofocus: true
   .form-group
     = f.label :name, value: 'Nombres'
-    = f.text_field :name, class: 'form-control upcase', placeholder: 'Nombre Completo', required: true
+    = f.text_field :name, class: 'form-control upcase', placeholder: 'Nombres', required: true
   .form-group
-    = f.label :full_name, value: 'Apellidos'
-    = f.text_field :full_name, class: 'form-control upcase', placeholder: 'Apellidos', required: true
+    = f.label :last_name, value: 'Apellidos'
+    = f.text_field :last_name, class: 'form-control upcase', placeholder: 'Apellidos', required: true
   .form-group
     = f.label :email, value: 'Correo'
     = f.email_field :email, class: 'form-control', placeholder:'Correo electrónico', required: true
@@ -37,6 +39,7 @@
   .form-group
     = f.label :password_confirmation, value: 'Confirmacion de Contraseña:'
     = f.password_field :password_confirmation, class: 'form-control', required: true
+
   .actions
     = f.submit 'Guardar', class: 'btn btn-primary btn-sm'
     = link_to 'Cancelar', root_path, class: 'btn btn-sm btn-white pull-right'

@@ -28,10 +28,11 @@ class LanguagesController < ApplicationController
 
     respond_to do |format|
       if @language.save
-        format.html { redirect_to @language, notice: 'Language was successfully created.' }
+        flash[:success] = '¡Idioma creado con éxito!'
+        format.html { redirect_to languages_path}
         format.json { render :show, status: :created, location: @language }
       else
-        format.html { render :new }
+        format.html { render :new, flash:{danger: "Error: #{@language.errors.full_messages.to_sentence}"} }
         format.json { render json: @language.errors, status: :unprocessable_entity }
       end
     end
@@ -42,9 +43,11 @@ class LanguagesController < ApplicationController
   def update
     respond_to do |format|
       if @language.update(language_params)
-        format.html { redirect_to @language, notice: 'Language was successfully updated.' }
+        flash[:success] = '¡Idioma creado con éxito!'
+        format.html { redirect_to languages_path}
         format.json { render :show, status: :ok, location: @language }
       else
+        flash[:danger] = @language.errors.full_messages.to_sentence
         format.html { render :edit }
         format.json { render json: @language.errors, status: :unprocessable_entity }
       end

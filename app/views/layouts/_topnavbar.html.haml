@@ -3,11 +3,12 @@
     .navbar-header
       %a.navbar-minimalize.minimalize-styl-2.btn.btn-primary{:href => "javascript:void(0);"}
         %i.fa.fa-bars
-      %form.navbar-form-custom{:action => "/", :method => "post", :role => "search"}
-        .form-group
-          %input#top-search.form-control{:name => "top-search", :placeholder => "Search for something...", :type => "text"}/
+      - if current_user.is_admin?
+        %form.navbar-form-custom{:action => "/", :method => "post", :role => "search"}
+          .form-group
+            %input#top-search.form-control{:name => "top-search", :placeholder => "Buscar Estudiante...", :type => "text"}/
     %ul.nav.navbar-top-links.navbar-right
       %li
-        %a{:href => "#"}
+        %a{href:  logout_home_path}
           %i.fa.fa-sign-out
-          Log out
+          Salir

@@ -1,25 +1,41 @@
-= form_for @evaluation do |f|
-  - if @evaluation.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@evaluation.errors.count, "error")} prohibited this evaluation from being saved:"
-      %ul
-        - @evaluation.errors.full_messages.each do |message|
-          %li= message
 
-  .field
-    = f.label :start
-    = f.datetime_select :start
-  .field
-    = f.label :end
-    = f.datetime_select :end
-  .field
-    = f.label :location
-    = f.text_field :location
-  .field
-    = f.label :lenguage
-    = f.text_field :lenguage
-  .field
-    = f.label :type_evaluation
-    = f.number_field :type_evaluation
-  .actions
-    = f.submit 'Save'
+= form_for @evaluation do |f|
+  = f.hidden_field :type
+  .form-group
+    = f.label :language_id, value: 'Idioma:'
+
+    = f.collection_select :language_id, Language.all, :id, :description, {}, { class: 'form-control', required: true, placeholder: 'Idioma'}
+  .form-group
+    = f.label :area_id, value: 'Área:'
+
+    = f.collection_select :area_id, Area.all, :id, :description, {}, { class: 'form-control', required: true, placeholder: 'Área'}
+
+  - if @evaluation.type.eql? 'Course'
+    .form-group
+      = f.label :start, value: 'Empieza:'
+      = f.date_field :start, class: 'form-control', required: true  
+    .form-group
+      = f.label :end, value: 'Finaliza:'
+      = f.date_field :end, class: 'form-control', required: true
+  - elsif @evaluation.type.eql? 'Test'
+    .form-group
+      = f.label :start, value: 'Empieza:'
+      = f.datetime_field :start, class: 'form-control', required: true
+    .form-group
+      %label= 'Duración:'
+      = number_field_tag :duration, 2, {class: 'form-control', in: 0...5, step: 1, required: true, placeholder: "Duración"}
+      %i.text-muted (Horas)
+  - else
+    .form-group
+      = f.label :start, value: 'Empieza:'
+      = f.datetime_field :start, class: 'form-control', required: true
+    .form-group
+      = f.label :end, value: 'Finaliza:'
+      = f.datetime_field :end, class: 'form-control', required: true
+
+  .form-group
+    = f.label :location, value: 'Ubicación:'
+    = f.text_field :location, class: 'form-control', placeholder: 'Ubicación'
+  .modal-footer 
+    %a.btn.btn-sm.btn-default{data: {dismiss: 'modal'}} Cancelar
+    = f.submit 'Guardar', class: 'btn btn-sm btn-primary'

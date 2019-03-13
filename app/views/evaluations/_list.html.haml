@@ -1,0 +1,50 @@
+%b= "#{type}s"
+%table.table.table-hover.table-striped.table-border
+  %thead
+    %tr
+      %th Inicio
+      %th= (evaluations.name.eql? 'Test') ? 'Duración' : 'Final'
+      %th Ubicación
+      %th Idioma
+      %th Área
+      %th
+
+  %tbody
+    - evaluations.each do |evaluation|
+      %tr
+        %td= (evaluations.name.eql? 'Test') ? evaluation.start.strftime('%d / %m / %Y, %I:%M%p') : evaluation.date_start
+        %td= (evaluations.name.eql? 'Test') ? evaluation.duration : evaluation.date_end
+        %td= evaluation.location
+        %td= evaluation.language.description.titleize
+        %td= evaluation.area.description if evaluation.area
+
+        %td
+          - total = evaluation.records.count
+          - if total > 0
+            %b.tooltip-btn{ 'data_toggle': :tooltip, title: 'Total Cursos y/o Pruebas'}
+              = b_tooltip "Total de #{type}s", total
+          - else
+            = link_to evaluation_path(evaluation), method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+              %i.fa.fa-trash.text-danger
+
+- idModal = "modal-form-#{evaluations.name.downcase}"
+
+= link_to "##{idModal}", class: 'btn btn-primary btn-sm', "data-toggle": :modal do
+  %i.fa.fa-plus
+  = type
+
+.modal.fade{id: idModal, "aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×      
+        %h4.text-center
+          Nuevo
+          = type
+      .modal-body
+
+        - @evaluation = Evaluation.new
+        - @evaluation.type = evaluations.name
+        = render '/evaluations/form'

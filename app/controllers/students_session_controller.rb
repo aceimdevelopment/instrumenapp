@@ -1,6 +1,4 @@
-class UserSessionsController < ApplicationController
-
-  layout 'visitors'
+class StudentsSessionController < ApplicationController
   
   def index
   	@user = current_user

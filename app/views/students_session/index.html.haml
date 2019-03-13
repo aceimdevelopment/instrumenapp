@@ -1,0 +1,36 @@
+.border.text-center.p-1.m-1
+
+  %h3.text-center Ofertas:
+  = inscriptions_buttons current_user.id
+- if current_user.records.count > 0
+  .border.m-t-2.p-2
+    %h3.text-center Evaluaciones:
+    %table.table.table-hover.table-striped.table-border
+      %thead
+        %tr
+          %th Idioma
+          %th Área
+          %th Tipo
+          %th Fecha Inicio
+          %th Estado
+          %th Opciones
+
+      %tbody
+        - current_user.records.each do |record|
+          %tr
+            %td= record.evaluation.language.description
+            %td= record.evaluation.area.description
+            %td= record.evaluation.tipo
+
+            %td= l(record.evaluation.start)
+            %td= record.state.titleize
+            %td
+              - if record.preinscrito?
+                = link_to '#', class: 'btn btn-xs btn-primary' do
+                  %i.fa.fa-download
+                  Planilla Inscripción
+              - elsif record.aprobado
+                = link_to '#', class: 'btn btn-xs btn-primary' do
+                  %i.fa.fa-download
+                  Constancia de Aprobación
+

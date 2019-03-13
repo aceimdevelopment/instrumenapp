@@ -1,0 +1,53 @@
+.loginscreen.animated.fadeInDown.m-b-xl{style: 'padding-bottom: 40px;'}
+  %h3.title.text-center.m-t-xl Registro de Usuario en Curso o Prueba
+
+  .middle-box
+    = form_for @user, {url: '/users/record_in_evaluation'} do |f|
+      .form-group
+        %label= "#{@eva_title}:"
+        = collection_select nil, :evaluation_id, @evaluations, :id, :description, {prompt: "#{@eva_title}..."}, { class: 'form-control', required: true, autofocus: true}
+      %hr
+      .form-group
+        = f.label :id, value: 'Cédula:'
+        = f.text_field :id, class: 'form-control ci', required: true, disabled: @disabled, placeholder: 'Cédula de Identidad'
+      .form-group
+        = f.label :name, value: 'Nombres'
+        = f.text_field :name, class: 'form-control upcase', placeholder: 'Nombres', required: true, disabled: @disabled
+      .form-group
+        = f.label :last_name, value: 'Apellidos'
+        = f.text_field :last_name, class: 'form-control upcase', placeholder: 'Apellidos', required: true, disabled: @disabled
+      - unless @disabled
+        .form-group
+          = f.label :email, value: 'Correo'
+          = f.email_field :email, class: 'form-control', placeholder:'Correo electrónico', required: true
+        .form-group
+          = f.label :phone, value: 'Teléfono'
+          = f.phone_field :phone, class: 'form-control ci', placeholder: 'Número Telefónico', required: true
+        .form-group
+          = f.label :password, value: 'Contraseña'
+          = f.password_field :password, class: 'form-control', required: true
+        .form-group
+          = f.label :password_confirmation, value: 'Confirmacion de Contraseña:'
+          = f.password_field :password_confirmation, class: 'form-control', required: true
+      .actions
+        = f.submit 'Guardar', class: 'btn btn-primary btn-sm'
+        - if current_user
+          - if current_user.is_admin?
+            - back = user_path(@user)
+          - else
+            - back = students_session_path
+        - back = @disabled ? students_session_path : root_path
+        = link_to 'Cancelar', back, class: 'btn btn-sm btn-white pull-right'
+
+:javascript
+
+  $('.upcase').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().toUpperCase());
+  });
+
+
+  $('.ci').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().replace(/[^0-9]/g,'') );
+    });

@@ -4,7 +4,8 @@ class EvaluationsController < ApplicationController
   # GET /evaluations
   # GET /evaluations.json
   def index
-    @evaluations = Evaluation.all
+      @tests = Test.all.limit(50)
+      @courses = Course.all.limit(50)
   end
 
   # GET /evaluations/1
@@ -15,6 +16,7 @@ class EvaluationsController < ApplicationController
   # GET /evaluations/new
   def new
     @evaluation = Evaluation.new
+    @evaluation.type = params[:type]
   end
 
   # GET /evaluations/1/edit
@@ -25,13 +27,13 @@ class EvaluationsController < ApplicationController
   # POST /evaluations.json
   def create
     @evaluation = Evaluation.new(evaluation_params)
-
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to @evaluation, notice: 'Evaluation was successfully created.' }
+        format.html { redirect_to evaluations_path, notice: 'Evaluation creada con éxito.' }
         format.json { render :show, status: :created, location: @evaluation }
       else
-        format.html { render :new }
+        flash[:danger] =  @evaluation.errors.full_messages.to_sentence
+        format.html { redirect_to evaluations_path}
         format.json { render json: @evaluation.errors, status: :unprocessable_entity }
       end
     end
@@ -42,10 +44,11 @@ class EvaluationsController < ApplicationController
   def update
     respond_to do |format|
       if @evaluation.update(evaluation_params)
-        format.html { redirect_to @evaluation, notice: 'Evaluation was successfully updated.' }
+        format.html { redirect_to evaluations_path, notice: 'Evaluation actualizada con éxito.' }
         format.json { render :show, status: :ok, location: @evaluation }
       else
-        format.html { render :edit }
+        flash[:danger] =  @evaluation.errors.full_messages.to_sentence
+        format.html { redirect_to evaluations_path}
         format.json { render json: @evaluation.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +59,7 @@ class EvaluationsController < ApplicationController
   def destroy
     @evaluation.destroy
     respond_to do |format|
-      format.html { redirect_to evaluations_url, notice: 'Evaluation was successfully destroyed.' }
+      format.html { redirect_to evaluations_url, notice: 'Prueba eliminda con éxito.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +72,10 @@ class EvaluationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def evaluation_params
-      params.require(:evaluation).permit(:start, :end, :location, :lenguage_id, :type_evaluation)
+      if params[:duration]
+        a = DateTime.parse params[:evaluation][:start]
+        params[:evaluation][:end] = (a + params[:duration].to_i.hours).to_s
+      end
+      params.require(:evaluation).permit(:start, :end, :location, :language_id, :type, :area_id)
     end
 end

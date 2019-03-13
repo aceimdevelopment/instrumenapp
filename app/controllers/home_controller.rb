@@ -1,6 +1,16 @@
 class HomeController < ApplicationController
   layout 'visitors'
   def index
+    aux = flash[:error]
+    aux2 = flash[:danger]
+    aux3 = flash[:success]
+    aux4 = flash[:notice]
+    reset_session
+    flash[:error] = aux
+    flash[:danger] = aux2
+    flash[:success] = aux3
+    flash[:notice] = aux4
+
     @mainTitle = "Cursos y Pruebas Instrumentales"
     @mainDesc = "Dominio Instrumental de Idiomas Extrangeros"
   end
@@ -17,11 +27,11 @@ class HomeController < ApplicationController
     if user = User.authenticate(login, clave)
       session[:user_id] = user.id
   
-      flash[:success] = "Bienvenido #{user.name}" 
-      if current_user.admin?
-        redirect_to admin_sessions_path
+      flash[:success] = "¡Bienvenido #{user.name}!" 
+      if current_user.is_admin?
+        redirect_to admins_session_path
       else
-        redirect_to user_sessions_path
+        redirect_to students_session_path
       end
 
     else
@@ -38,6 +48,4 @@ class HomeController < ApplicationController
     redirect_to root_path
   end 
 
-  def minor
-  end
 end
