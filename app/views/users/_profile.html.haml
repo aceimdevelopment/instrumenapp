@@ -1,0 +1,31 @@
+%h2 Datos personales: 
+%table.table.table-hover.table-striped.table-border
+  %thead
+    %tr
+      %th CI
+      %th Nombres
+      %th Apellidos
+      %th Correo
+      %th Teléfono
+      %th Rol
+      %th 
+  %tbody
+    %tr
+      %td= @user.id
+      %td= @user.name
+      %td= @user.last_name
+      %td= @user.email
+      %td= @user.phone
+      %td= @user.tipo.titleize
+      %td
+        = link_to reset_pw_user_path(@user), class: 'tooltip-btn', 'data_toggle': :tolltip, title: 'Resetar Contraseña' do
+          %span.badge.badge-warning
+            .fa.fa-refresh
+            PW
+      %td
+        = link_to edit_user_path(@user), class: 'tooltip-btn', 'data_toggle': :tooltip, title: 'Ediar Usuario' do
+          %i.fa.fa-pencil
+      %td
+        = link_to user_path(@user), method: :delete, data: { confirm: 'Ésta acción es irreversible y se eliminarán los registros asociados al usuario ¿está seguro?' } do
+          %i.fa.fa-trash.text-danger
+

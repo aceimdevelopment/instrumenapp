@@ -1,21 +1,57 @@
-%p#notice= notice
+= link_to 'Regresar', evaluations_path, class: 'btn btn-sm btn-default m-t-2'
 
-%p
-  %b Start:
-  = @evaluation.start
-%p
-  %b End:
-  = @evaluation.end
-%p
-  %b Location:
-  = @evaluation.location
-%p
-  %b Lenguage:
-  = @evaluation.lenguage
-%p
-  %b Type:
-  = @evaluation.type
+%h2 Caracteristicas del curso:
 
-= link_to 'Edit', edit_evaluation_path(@evaluation)
-\|
-= link_to 'Back', evaluations_path
+%table.table.table-hover.table-striped.table-border
+  %thead
+    %tr
+      %th Inicio
+      %th= (@evaluation.is_a? Test) ? 'Duración' : 'Final'
+      %th Ubicación
+      %th Tipo
+      %th Idioma
+      %th Área
+      %th Costo
+      %th
+        %b.tooltip-btn{ 'data_toggle': :tooltip, title: 'Preinscritos Vs Inscritos'} Pre/Ins
+
+  %tbody
+    %tr
+      %td= (@evaluation.is_a? Test) ? @evaluation.start.strftime('%d / %m / %Y, %I:%M%p') : @evaluation.date_start
+      %td= (@evaluation.is_a? Test) ? @evaluation.duration : @evaluation.date_end
+      %td= @evaluation.location
+      %td= @evaluation.type
+      %td= @evaluation.language.description.titleize
+      %td= @evaluation.area.description if @evaluation.area
+      %td= @evaluation.cost_to_bs
+      %td= "#{@evaluation.records.preinscrito.count}/#{@evaluation.records.inscrito.count}"
+
+      - if @evaluation.abierto?
+        %td
+          = link_to confirm_evaluation_path(@evaluation), class: 'btn btn-xs btn-primary tooltip-btn', data_toggle: :tooltip, title: 'Confirmar' do
+            %i.fa.fa-check
+
+      %td
+        - total = @evaluation.records.count
+        - unless total > 0
+          = link_to evaluation_path(@evaluation), method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+            %i.fa.fa-trash.text-danger
+
+- if @evaluation.records.count > 0
+  %h2 Participantes:
+  %table.table.table-hover.table-striped.table-border
+    %thead
+      %tr
+        %th CI
+        %th Apellidos y Nombres
+        %th Estado
+        %th
+    %tbody
+      - @evaluation.records.each do |r| 
+        %tr
+          %td= link_to r.student.id, user_path(r.student)
+          %td= r.student.inverse_name
+          %td= label_state_record r
+          %td
+            = link_to "#{users_destroy_record_path}?id=#{r.id}", class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+              %i.fa.fa-trash

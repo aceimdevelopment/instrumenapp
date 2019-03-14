@@ -1,22 +1,5 @@
 
-= form_for @user do |f|
-
-  - if params[:test]
-    .form-group
-      %label Pruebas Disponibles:
-      =# text_field_tag :test, nil, class: 'form-control', required: true, placeholder: 'Test'
-      = collection_select nil, :evaluation_id, Test.abierto, :id, :description, {prompt: "Pruebas Disponibles..."}, { class: 'form-control', required: true}
-  - elsif params[:course]
-    = collection_select nil, :evaluation_id, Course.abierto, :id, :description, {prompt: "Pruebas Disponibles..."}, { class: 'form-control', required: true}
-
-  - if current_user and current_user.admin?
-    .form-group
-      = radio_button_tag '[user]role', :student, false, required: true
-      Estudiante
-      = radio_button_tag '[user]role', :admin, false, required: true
-      Administrador
-  - else
-    = hidden_field_tag :registro, true
+= form_for @user, {url: user_path} do |f|
 
   .form-group
     = f.label :id, value: 'Cédula:'
@@ -33,16 +16,9 @@
   .form-group
     = f.label :phone, value: 'Teléfono'
     = f.phone_field :phone, class: 'form-control ci', placeholder: 'Número Telefónico', required: true
-  .form-group
-    = f.label :password, value: 'Contraseña'
-    = f.password_field :password, class: 'form-control', required: true
-  .form-group
-    = f.label :password_confirmation, value: 'Confirmacion de Contraseña:'
-    = f.password_field :password_confirmation, class: 'form-control', required: true
 
   .actions
     = f.submit 'Guardar', class: 'btn btn-primary btn-sm'
-    = link_to 'Cancelar', root_path, class: 'btn btn-sm btn-white pull-right'
 
 
 :javascript

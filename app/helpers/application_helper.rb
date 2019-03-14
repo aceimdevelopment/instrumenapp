@@ -7,6 +7,14 @@ module ApplicationHelper
         end
     end
 
+    def label_state_record record
+
+        content_tag :span, class: "label label-#{record.alert_type}" do
+            capture_haml{record.state.titleize}
+        end
+        
+    end
+
     def is_active_action(action_name)
         params[:action] == action_name ? "active" : nil
     end

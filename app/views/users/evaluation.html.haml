@@ -2,7 +2,7 @@
   %h3.title.text-center.m-t-xl Registro de Usuario en Curso o Prueba
 
   .middle-box
-    = form_for @user, {url: '/users/record_in_evaluation'} do |f|
+    = form_for @user, {url: users_record_in_evaluation_path} do |f|
       .form-group
         %label= "#{@eva_title}:"
         = collection_select nil, :evaluation_id, @evaluations, :id, :description, {prompt: "#{@eva_title}..."}, { class: 'form-control', required: true, autofocus: true}

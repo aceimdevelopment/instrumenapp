@@ -8,6 +8,7 @@
       %th Idioma
       %th Área
       %th
+        %b.tooltip-btn{ 'data_toggle': :tooltip, title: 'Preinscritos Vs Inscritos'} Pre/Ins
 
   %tbody
     - evaluations.each do |evaluation|
@@ -17,10 +18,12 @@
         %td= evaluation.location
         %td= evaluation.language.description.titleize
         %td= evaluation.area.description if evaluation.area
+        %td= link_to "#{evaluation.records.preinscrito.count}/#{evaluation.records.inscrito.count}", evaluation_path(evaluation)
 
         %td
           - total = evaluation.records.count
           - if total > 0
+
             %b.tooltip-btn{ 'data_toggle': :tooltip, title: 'Total Cursos y/o Pruebas'}
               = b_tooltip "Total de #{type}s", total
           - else

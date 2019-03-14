@@ -1,0 +1,46 @@
+
+- if records.count > 0
+  %h2 Evaluaciones:
+  %table.table.table-hover.table-striped.table-border
+    %thead
+      %tr
+        %th Descripción
+        %th Fecha de inicio
+        %th Tipo
+        - if current_user.is_admin?
+          %th Baucher
+        %th Estado
+        %th 
+    %tbody
+      - records.each do |r| 
+        %tr
+          %td= link_to r.evaluation.description, evaluation_path(r.evaluation)
+          %td= r.evaluation.start
+          %td= r.evaluation.tipo
+          - if current_user.is_admin?
+            %td= r.baucher
+          %td= label_state_record r
+          - if current_user.is_admin?
+            - if r.preinscrito?
+              %td
+                .tooltip-btn{'data-toggle': :tooltip, title: 'Confirmar Inscripción'}
+                  = link_to '#confimationModal', class: 'badge badge-primary', "data-toggle": :modal, onclick: "$('#confimation_form #record_id').val('#{r.id}');" do
+                    %i.fa.fa-check
+            %td
+              = link_to "#{users_destroy_record_path}?id=#{r.id}", class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+                %i.fa.fa-trash
+
+          - if r.preinscrito? and r.evaluation.confirmado?
+            %td
+              = link_to make_inscription_download_path(r.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Planilla Inscripción', target: "_blank" do
+                %i.fa.fa-download
+                Ins
+          - if r.aprobado?
+            %td
+              = link_to '#', class: 'btn btn-xs btn-primary' do
+                %i.fa.fa-download
+                Constancia de Aprobación
+
+- if current_user.is_admin?
+  = render '/users/confirmation_modal'
+

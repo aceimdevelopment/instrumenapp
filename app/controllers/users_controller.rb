@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :reset_pw]
 
   layout 'visitors', only: [:evaluation]
   # GET /users
@@ -44,37 +44,45 @@ class UsersController < ApplicationController
     @eva_title += " Disponibles"
   end
 
+  def destroy_record
+    r = Record.find params[:id]
+    @evaluation = r.evaluation
+    flash[:info] = "Registro de inscripción elimnado con éxito" if r.destroy
+    redirect_back fallback_location: @evaluation
+
+  end
 
   def record_in_evaluation
-
-    @user = Student.where(id: user_params[:id]).first
-    @user = Student.new(user_params) unless @user
-    if @user.save
-      flash[:success] = 'Usuario registrado'
-      if params[:evaluation_id]
-        # t = Record.new
-        # t.evaluation_id = params[:evaluation_id]
-        # t.user_id = @user.id
-
-        if @user.records.create(evaluation_id: params[:evaluation_id]) #t.save
-          flash[:success] += ' y preinscrito con éxito.'
-          if current_user and current_user.admin?
-            redirect_to @user
-          else
-            session[:user_id] = @user.id
-            redirect_to students_session_path
-          end
+    if !params[:id] and Student.where(id: user_params[:id]).count > 0
+        flash[:danger] = 'El usuario ya se encuentra registrado. Por favor, inicie sesión e inténtelo nuevamente.'
+        redirect_to root_path
+    else
+      if params[:id] 
+        @user = Student.where(id: params[:id]).first
+      else
+        @user = Student.new(user_params)
+        if @user.save
+          flash[:info] = '¡Usuario registrado!'
         else
-          flash[:danger] = t.errors.full_messages.to_sentence
-          redirect_to fallback_location: "#{users_evaluation_path}?id=#{user_params[:id]}"
+          flash[:danger] = @user.errors.full_messages.to_sentence
         end
       end
-    else
-      flash[:danger] = "Error: #{@user.errors.full_messages.to_sentence}"
-      redirect_back fallback_location: "#{users_evaluation_path}?id=#{user_params[:id]}"
+      record = Record.new
+      record.user_id = @user.id
+      record.evaluation_id = params[:evaluation_id]
+      if record.save
+        flash[:success] = "¡Preinscrito extitosamente! Manténgase atento e ingrese a su session de usuario con regularidad. En cuanto su #{record.evaluation.tipo} cuente con el cuorum suficiente se le permitirá descargar la planilla y continuar el proceso de inscripción."
+        if current_user and current_user.is_admin?
+          redirect_to @user
+        else
+          session[:user_id] = @user.id
+          redirect_to students_session_path
+        end
+      else
+        flash[:danger] = record.errors.full_messages.to_sentence
+        redirect_back fallback_location: root_path
+      end
     end
-
-    
   end
 
   # POST /users
@@ -98,18 +106,29 @@ class UsersController < ApplicationController
     end
   end
 
+  def record_confirmation
+    @record = Record.find params[:record_id]
+    @record.baucher = params[:baucher]
+    @record.state = :inscrito
+    flash[:success] = '¡Inscripción confirmada!' if @record.save
+    redirect_back fallback_location: user_path(@record.student)
+  end
+
+  def reset_pw
+    @user.password = @user.id
+    flash[:success] = 'Contraseña reseteada. Ahora será igual a la Cédula de Identidad' if @user.save
+    redirect_back fallback_location: user_path(@user)
+  end
+
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update(user_params)
+      flash[:success] = 'Usuario Actualizado'
+    else
+      flash[:danger] = @user.errors.full_messages.to_sentence
     end
+    redirect_to user_path(@user)
   end
 
   # DELETE /users/1
@@ -125,11 +144,13 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
+      params[:user] = params[:admin] if params[:admin]
+      params[:user] = params[:student] if params[:student]
       @user = User.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:id, :name, :last_name, :email, :phone, :password, :role, :password_confirmation)
+      params.require(:user).permit(:id, :name, :last_name, :email, :phone, :password, :type, :password_confirmation)
     end
 end

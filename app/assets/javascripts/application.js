@@ -20,3 +20,7 @@
 //= require pace/pace.min.js
 //= require slimscroll/jquery.slimscroll.min.js
 //= require_tree .
+
+$(document).ready(function() {
+	$('.tooltip-btn').tooltip();
+});

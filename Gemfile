@@ -8,6 +8,10 @@ gem 'bootstrap-sass', '~> 3.3.7'
 gem 'font-awesome-rails'
 
 
+gem 'prawn'
+gem 'prawn-table'
+
+
 gem 'haml-rails'
 
 

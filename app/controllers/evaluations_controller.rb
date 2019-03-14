@@ -1,11 +1,11 @@
 class EvaluationsController < ApplicationController
-  before_action :set_evaluation, only: [:show, :edit, :update, :destroy]
+  before_action :set_evaluation, only: [:show, :edit, :update, :destroy, :confirm]
 
   # GET /evaluations
   # GET /evaluations.json
   def index
-      @tests = Test.all.limit(50)
-      @courses = Course.all.limit(50)
+    @tests = Test.abierto.limit(50).order(['state ASC','start DESC'])
+    @courses = Course.abierto.limit(50).order(['state ASC','start DESC'])
   end
 
   # GET /evaluations/1
@@ -21,6 +21,12 @@ class EvaluationsController < ApplicationController
 
   # GET /evaluations/1/edit
   def edit
+  end
+
+  def confirm
+    @evaluation.state = :confirmado
+    flash[:success] = '¡Confirmado!' if @evaluation.save
+    redirect_back fallback_location: evaluations_path
   end
 
   # POST /evaluations

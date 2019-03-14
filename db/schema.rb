@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_08_152305) do
+ActiveRecord::Schema.define(version: 2019_03_13_213648) do
 
   create_table "areas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "description", null: false
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2019_03_08_152305) do
     t.string "type", null: false
     t.bigint "area_id"
     t.integer "state", default: 0
+    t.integer "cost", default: 0
     t.index ["area_id"], name: "index_evaluations_on_area_id"
     t.index ["language_id", "start"], name: "index_evaluations_on_language_id_and_type_evaluation_and_start", unique: true
     t.index ["language_id"], name: "index_evaluations_on_language_id"

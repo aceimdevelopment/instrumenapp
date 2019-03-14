@@ -12,6 +12,10 @@ class Evaluation < ApplicationRecord
   validates :type, presence: true
   validates :language_id, presence: true
 
+  def cost_to_bs
+    "#{cost},oo Bs."
+  end
+
   def tipo
     if type.eql? 'Test'
       return 'Prueba'
