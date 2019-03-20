@@ -1,9 +1,4 @@
-%h1 
-  = link_to new_user_path, class: 'btn btn-primary btn-sm m-r-1' do
-    %span.fa.fa-plus
-    Agregar
-
-  Usuarios
+%h1 Usuarios
 
 %table.table.table-striped.table-sm.table-hover
   %thead
@@ -24,7 +19,7 @@
     - @users.each_with_index do |user, i|
       %tr
         %td= i+1
-        %td= link_to user.id, user_path(user)
+        %td= link_to user.id, user_path(user) if user.is_student?
         %td= user.name
         %td= user.last_name
         %td= user.email

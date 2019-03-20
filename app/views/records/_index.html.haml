@@ -14,7 +14,7 @@
     %tbody
       - records.each do |r| 
         %tr
-          %td= link_to r.evaluation.description, evaluation_path(r.evaluation)
+          %td= link_to_if current_user.is_admin?, r.evaluation.description, evaluation_path(r.evaluation)
           %td= r.evaluation.start
           %td= r.evaluation.tipo
           - if current_user.is_admin?

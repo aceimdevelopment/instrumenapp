@@ -1,4 +1,4 @@
 
 = render partial: '/users/profile'
 
-= render partial: '/records/index', locals: {records: @user.records}
+= render partial: '/records/index', locals: {records: @user.records} if user.is_student?
