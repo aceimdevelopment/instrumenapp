@@ -5,7 +5,21 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.all.limit(50)
+
+    if params['top-search']
+      @users = User.search(params['top-search']).limit(50)
+      if @users.count > 0 && @users.count < 50  
+        flash[:success] = "Total de coincidencias: #{@users.count}"
+      elsif @users.count == 0
+        flash[:error] = "No se encontraron conincidencas. Intenta con otra búsqueda"
+      else
+        flash[:error] = "50 o más conincidencia. Puedes ser más explicito en la búsqueda. Recuerda que puedes buscar por CI, Nombre, Apellido, Correo Electrónico o incluso Número Telefónico"
+      end
+    else
+      @users = User.limit(50).order("created_at, last_name, name, id")
+    end
+
   end
 
   # GET /users/1

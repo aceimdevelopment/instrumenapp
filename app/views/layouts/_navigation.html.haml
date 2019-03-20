@@ -30,7 +30,11 @@
           = link_to areas_path do
             %i.fa.fa-cubes
             %span.nav-label Areas
-        %li{:class => "#{'active' if controller_name.eql? ('language') }"}
+        %li{:class => "#{'active' if controller_name.eql? ('languages') }"}
           = link_to languages_path do
             %i.fa.fa-language
             %span.nav-label Idiomas
+        %li{:class => "#{'active' if controller_name.eql? ('users') }"}
+          = link_to users_path do
+            %i.fa.fa-users
+            %span.nav-label Usuarios

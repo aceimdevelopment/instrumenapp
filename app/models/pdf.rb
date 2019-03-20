@@ -1,6 +1,46 @@
 class Pdf
 	include Prawn::View
 
+
+	def self.records evaluation_id
+  		eva = Evaluation.find evaluation_id
+
+		# Variable Locales
+		pdf = Prawn::Document.new(top_margin: 20)
+
+		#titulo
+		encabezado_central_con_logo pdf, "Listado de Participantes"
+		pdf.move_down 10
+
+		pdf.text "#{eva.tipo}: #{eva.description} / Fecha: #{I18n.l(eva.start, format: "%d de %B de %Y")} / Total: #{eva.total_records}", align: :center, size: 12 
+
+		pdf.move_down 10
+
+		#instructor
+		# pdf.text "Profesor: #{seccion.descripcion_profesor_asignado}", size: 10
+	 
+		pdf.move_down 10
+		data = [["<b>#</b>", "<b>Nombres</b>", "<b>Cédula</b>", "<b>Correo</b>", "<b>Estado</b>"]]
+
+		records = eva.records.sort_by{|h| h.student.last_name}
+
+		records.each_with_index do |e,i|
+			data << [i+1, 
+			e.student.inverse_name,
+			e.user_id,
+			e.student.email,
+			e.state.titleize
+			]	
+
+		end
+		
+		t = pdf.make_table(data, header: true, row_colors: ["F0F0F0", "FFFFFF"], width: 540, position: :center, cell_style: { inline_format: true, size: 9, align: :justify, padding: 3, border_color: '818284'}, :column_widths => {1 => 250})
+		t.draw
+
+		return pdf
+	end
+
+
 	def self.make_inscription_flayer record_id
 		# Variable Locales
 		record = Record.find record_id

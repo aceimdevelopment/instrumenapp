@@ -26,6 +26,12 @@
       %td= @evaluation.cost_to_bs
       %td= "#{@evaluation.records.preinscrito.count}/#{@evaluation.records.inscrito.count}"
 
+      %td
+        = link_to make_evaluation_list_download_path(@evaluation.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Lista de Secciones', target: "_blank" do
+          %i.fa.fa-download
+          Lista
+
+
       - if @evaluation.abierto?
         %td
           = link_to confirm_evaluation_path(@evaluation), class: 'btn btn-xs btn-primary tooltip-btn', data_toggle: :tooltip, title: 'Confirmar' do

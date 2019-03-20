@@ -4,7 +4,7 @@
       %a.navbar-minimalize.minimalize-styl-2.btn.btn-primary{:href => "javascript:void(0);"}
         %i.fa.fa-bars
       - if current_user.is_admin?
-        %form.navbar-form-custom{:action => "/", :method => "post", :role => "search"}
+        %form.navbar-form-custom{:action => users_path, :method => "get", :role => "search"}
           .form-group
             %input#top-search.form-control{:name => "top-search", :placeholder => "Buscar Estudiante...", :type => "text"}/
     %ul.nav.navbar-top-links.navbar-right

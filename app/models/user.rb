@@ -10,6 +10,11 @@ class User < ApplicationRecord
 	validates :password, presence: true
 	validates :password, confirmation: true
 
+	scope :search, lambda { |clave| 
+	  where("id LIKE ? OR name LIKE ? OR last_name LIKE ? OR email LIKE ? OR phone LIKE ?","%#{clave}%","%#{clave}%","%#{clave}%", "%#{clave}%", "%#{clave}%")
+	}
+
+
 	def tipo
 		if type.eql? 'Student'
 			return 'Estudiante'
