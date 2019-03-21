@@ -5,7 +5,7 @@ ruby '2.5.1'
 
 
 gem 'bootstrap-sass', '~> 3.4.1'
-gem 'font-awesome-rails'
+gem 'font-awesome-rails', '4.7.0.4'
 
 
 gem 'prawn'
