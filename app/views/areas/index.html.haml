@@ -1,4 +1,8 @@
 %h1
+  = link_to "#modal-area", class: 'btn btn-primary btn-sm m-r-1', "data-toggle": :modal, onclick: "change_form('#{areas_path}')" do
+    %i.fa.fa-plus
+    Área
+
   %i.fa.fa-cubes
   Áreas
 
@@ -28,11 +32,6 @@
               %i.fa.fa-trash.text-danger
 
 %br
-
-= link_to "#modal-area", class: 'btn btn-primary btn-sm', "data-toggle": :modal, onclick: "change_form('#{areas_path}')" do
-  %i.fa.fa-plus
-  Área
-
 
 #modal-area.modal.fade{"aria-hidden": "true", tabindex: '-1'}
   .modal-dialog
