@@ -1,0 +1,17 @@
+= form_for @schedule do |f|
+
+  .form-group
+    = f.label :tipo, class: 'control-label', value: 'Tipo de Evaluación:'
+    %br
+    - Schedule.evatypes.map do |k,v| 
+      %label.tooltip-btn{'data_toggle': :tooltip, title: k.titleize}
+        .btn.btn-xs.btn-primary
+          = radio_button_tag '[schedule]evatype', k, (k.eql? @schedule.evatype), required: true, class: ''
+          = k.upcase
+  .form-group
+    = f.label :description, class: 'control-label', value: 'Descripción:'
+    = f.text_field :description, class: 'form-control', required: true, placeholder: 'Descripción', autofocus: true
+
+  .actions
+    %a.btn.btn-sm.btn-default{data: {dismiss: 'modal'}} Cancelar
+    = f.submit 'Guardar', class: 'btn btn-sm btn-primary'

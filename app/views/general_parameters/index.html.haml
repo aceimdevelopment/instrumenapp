@@ -1,0 +1,76 @@
+%h1
+  %i.fa.fa-cogs
+  Configuración General
+
+.text-center.alert.alert-danger
+  %b.text-muted
+    VALORES POR DEFECTO A SER USADOS AL MOMENTO DE GENERAR AUTOMÁTICAMENTE LAS PRUEBAS Y/O CURSOS
+
+%table.table.table-striped.table-sm.table-hover
+  %thead
+    %tr
+      %th Clave
+      %th Valor
+      %th
+
+  %tbody
+    - @gen_params.each do |param|
+      %tr
+        %td
+          = param.id
+          - if param.id.eql? GeneralParameter::HORARIO_PRUEBA
+            = link_to schedules_path do
+              %i.fa.fa-clock-o
+              %span.nav-label Horarios
+
+        %td 
+          - if param.id.eql? GeneralParameter::HORARIO_PRUEBA
+            = Schedule.find(param.value).description
+          - else
+            = param.value
+        %td
+          = link_to 'javascript:void(0)', onclick: "change_form('#{param.id}', '#{param.value}');", class: 'tooltip-btn float-left mr-md-3 btn btn-sm btn-outline-success', 'data_toggle': :tooltip, title: 'Editar área' do
+            %i.fa.fa-pencil
+
+#modalSetValue.modal.fade{"aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×      
+        %h4#area_titulo.text-center
+          Editar Valor Variable
+      .modal-body
+        = render '/general_parameters/form'
+
+:javascript
+
+  function change_form(id,value){
+    if(id == 'HORARIO_PRUEBA'){
+
+      $('form #id').val(id);
+      $('form #schedule_value').val(value);
+      
+      $('form #schedule_value').prop('disabled', false);
+      $('form #value').prop('disabled', true);
+      
+      $('form #schedule_value').show();
+      $('form #value').hide();
+
+    }else{
+
+      $('form #id').val(id);
+      $('form #value').val(value);
+
+      $('form #value').show();
+      $('form #schedule_value').hide();
+      
+      $('form #schedule_value').prop('disabled', true);
+      $('form #value').prop('disabled', false);
+
+      // $('form #schedule_value').prop('disabled', false);
+
+    }
+    $('#modalSetValue').modal();
+
+  }  

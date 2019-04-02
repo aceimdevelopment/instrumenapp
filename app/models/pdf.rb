@@ -22,14 +22,14 @@ class Pdf
 		pdf.move_down 10
 		data = [["<b>#</b>", "<b>Nombres</b>", "<b>Cédula</b>", "<b>Correo</b>", "<b>Estado</b>"]]
 
-		records = eva.records.sort_by{|h| h.student.last_name}
+		inscriptions = eva.inscriptions.sort_by{|h| h.student.last_name}
 
-		records.each_with_index do |e,i|
+		inscriptions.each_with_index do |e,i|
 			data << [i+1, 
-			e.student.inverse_name,
+			e.user.inverse_name,
 			e.user_id,
-			e.student.email,
-			e.state.titleize
+			e.user.email,
+			e.status.titleize
 			]	
 
 		end
@@ -41,9 +41,9 @@ class Pdf
 	end
 
 
-	def self.make_inscription_flayer record_id
+	def self.make_inscription_flayer inscription_id
 		# Variable Locales
-		record = Record.find record_id
+		inscription = Inscription.find inscription_id
 
 		pdf = Prawn::Document.new(top_margin: 20)
 
@@ -52,8 +52,7 @@ class Pdf
 
 		pdf.move_down 10
 
-		preinscription_data record, pdf
-		bank_description record, pdf
+		preinscription_data inscription, pdf
 		signatures pdf
 
 		pdf.text "----- COPIA DEL ESTUDIANTE -----", size: 10, align: :center
@@ -68,8 +67,8 @@ class Pdf
 
 		# pdf.add_image_from_file Rutinas.crear_codigo_barra(historial_academico.usuario_ci), 460, 280, nil, 100
 
-		preinscription_data record, pdf
-		bank_description record, pdf
+		preinscription_data inscription, pdf
+		bank_description inscription, pdf
 		signatures pdf
 
 		pdf.text "----- COPIA ADMINISTRACIÓN -----", size: 10, align: :center
@@ -102,16 +101,16 @@ class Pdf
   #   return pdf
   # end
 
-  def self.preinscription_data record, pdf
+  def self.preinscription_data inscription, pdf
     # ------- DATOS DE LA PREINSCRIPCIO -------
 
 	pdf.text "<b>Datos de la Preinscripción:</b>", size: 11, inline_format: true, align: :center
+	data = [["<i>Participante:</i>", "<b>#{inscription.user.description if inscription.user}</b>"]]
+	data << ["<i>#{inscription.tipo}:</i>", "<b>#{inscription.description}</b>"]
 
-	data = [["<i>Curso:</i>", "<b>#{record.evaluation.description}</b>"]]
-	data << ["<i>Horario:</i>", "<b>Horario</b>"]
-	data << ["<i>Ubicación:</i>", "<b>#{record.evaluation.location}</b>"]
-	# data << ["<i>Monto:</i>", "<b>#{record.evaluation.cost_to_bs}</b>"]
-	# data << ["<i>Transacción:</i>", "_________________________ Tipo: T ____ D____ P ____"]
+
+	data << ["<i>Horario:</i>", "<b>_________________________</b>"]
+	data << ["<i>Ubicación:</i>", "<b>#{inscription.evaluation.location}</b>"] if inscription.evaluation
 
 	t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})
 	t.draw
@@ -119,15 +118,15 @@ class Pdf
 
   end
 
-  def self.bank_description record, pdf
+  def self.bank_description inscription, pdf
     # -------- TABLA CUENTA ------- #
 	pdf.move_down 10
 
 	pdf.text "<b>Datos de Pago:</b>", size: 11, inline_format: true, align: :center
 
-	data = [["<i>Banco:</i>", "<b>Cuenta Corriente _________________________ </b> del Banco de Venezuela"]]
-	data << ["<i>A nombre de:</i>", "_________________________"]
-	data << ["<i>Monto:</i>", "#{record.evaluation.cost_to_bs}"]
+	data = [["<i>Cuenta:</i>", "<b>Cuenta Corriente # 0102-0140-34000442688-4 del Banco de Venezuela</b>"]]
+	data << ["<i>A nombre de:</i>", "FUNDEIM (RIF: J-30174529-9)"]
+	data << ["<i>Monto:</i>", "#{inscription.evaluation.cost}"] if inscription.evaluation
 	data << ["<i>Transacción:</i>", "_________________________ Tipo: T ____ D____ P ____"]
 
 	t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})

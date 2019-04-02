@@ -14,6 +14,9 @@ class User < ApplicationRecord
 	  where("id LIKE ? OR name LIKE ? OR last_name LIKE ? OR email LIKE ? OR phone LIKE ?","%#{clave}%","%#{clave}%","%#{clave}%", "%#{clave}%", "%#{clave}%")
 	}
 
+	def description
+		"(#{id}) #{inverse_name}"
+	end
 
 	def tipo
 		if type.eql? 'Student'

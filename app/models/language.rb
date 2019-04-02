@@ -1,5 +1,5 @@
 class Language < ApplicationRecord
-	has_many :evaluations
+	has_many :inscriptions
 
 	validates :id, presence: true, uniqueness: { case_sensitive: false }
 	validates :description, presence: true, uniqueness: { case_sensitive: false }

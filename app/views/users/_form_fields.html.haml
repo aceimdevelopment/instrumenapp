@@ -1,0 +1,24 @@
+.form-group
+  %label Cédula:
+  = text_field_tag 'user[id]', @user.id, class: 'form-control ci', required: true, readonly: !@is_new, placeholder: 'Cédula de Identidad'
+.form-group
+  %label Nombres:
+  = text_field_tag 'user[name]', @user.name, class: 'form-control upcase', placeholder: 'Nombres', required: true
+.form-group
+  %label Apellidos:
+  = text_field_tag 'user[last_name]', @user.last_name, class: 'form-control upcase', placeholder: 'Apellidos', required: true
+.form-group
+  %label Correo:
+  = email_field_tag 'user[email]', @user.email, class: 'form-control', placeholder:'Correo electrónico', required: true
+.form-group
+  %label Teléfono:
+  = phone_field_tag 'user[phone]', @user.phone, class: 'form-control ci', placeholder: 'Número Telefónico', required: true
+- if @is_new
+  .form-group
+    %label Contraseña:
+    = password_field_tag 'user[password]', nil, class: 'form-control', required: true
+  .form-group
+    %label Confirmación de Contraseña:
+    = password_field_tag 'user[password_confirmation]', nil, class: 'form-control', required: true
+
+

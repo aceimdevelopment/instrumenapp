@@ -1,0 +1,9 @@
+= form_tag( set_value_general_parameters_path, class: "form-horizontal m-t") do
+  .form-group
+    = text_field_tag :id, nil, class: 'form-control', readonly: true
+    = text_field_tag :value, nil, class: 'form-control', required: true
+
+    = collection_select :schedule, :value, Schedule.prueba, :id, :description, {include_blank: 'Seleccione Horario...'}, {class: 'form-control', required: true}
+  .actions
+    %a.btn.btn-sm.btn-default{data: {dismiss: 'modal'}} Cancelar
+    = submit_tag 'Guardar', class: 'btn btn-sm btn-primary'

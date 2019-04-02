@@ -1,0 +1,67 @@
+%h1
+  = link_to "#modal-schedule", class: 'btn btn-primary btn-sm m-r-1', "data-toggle": :modal, onclick: "change_form('#{schedules_path}')" do
+    %i.fa.fa-plus
+    Horario
+
+  %i.fa.fa-clock-o
+  Horarios
+
+%table.table.table-striped.table-sm.table-hover
+  %thead
+    %tr
+      %th Description
+      %th Tipo
+      %th
+      %th
+
+  %tbody
+    - @schedules.each do |schedule|
+      %tr
+        %td= schedule.description
+        %td= schedule.evatype.titleize
+        %td
+          = link_to 'javascript:void(0)', onclick: "change_form('#{schedule_path(schedule)}', '#{schedule.description}', 'true');", class: 'tooltip-btn float-left mr-md-3 btn btn-sm btn-outline-success', 'data_toggle': :tooltip, title: 'Editar área' do
+            %i.fa.fa-pencil
+
+        %td
+          - total = schedule.evaluations.count 
+          - if total > 0
+            %b.tooltip-btn{'data_toggle': :tooltip, title: 'Evaluaciones asociadas al horario'}
+              = total
+          - else
+            = link_to schedule, method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+              %i.fa.fa-trash.text-danger
+
+%br
+
+#modal-schedule.modal.fade{"aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×      
+        %h4#schedule_titulo.text-center
+          Nueva Horario
+      .modal-body
+        - @schedule = Schedule.new
+        = render '/schedules/form'
+
+:javascript
+
+  function change_form(url, descr='', edit='false'){
+    var form_schedule = $('#new_schedule');
+    form_schedule.attr("action", url);
+    if (edit == 'true') {
+      $('#schedule_description').val(descr);
+      form_schedule.append("<input type='hidden' name='_method' value='patch' id='inputEdit'>");
+      $('#schedule_titulo').html('Editar Horario de ' + descr);
+      $('#modal-schedule').modal();
+    }else{
+      $('#schedule_titulo').html('Nueva Horario');
+      $('#schedule_description').val('');
+      $('#inputEdit').val('');
+      $('#inputEdit').attr('name', '');
+    }
+
+  }

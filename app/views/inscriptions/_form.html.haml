@@ -1,0 +1,35 @@
+= form_for @inscription do |f|
+  .text-muted.pull-left Selección de Evaluación:
+  %br
+  .form-group
+    = f.label :lenguage, value: 'Idioma:'
+    = f.collection_select :language_id, languages, :id, :description, {prompt: "Idioma..."}, { class: 'form-control', required: true, autofocus: true}
+  .form-group
+    = f.label :area, value: 'Área:'
+    = f.collection_select :area_id, Area.all.order(description: :asc), :id, :description, {prompt: "Área..."}, { class: 'form-control', required: true}
+    = f.hidden_field :evatype
+  %hr
+  -# if params[:user_id]
+  =# f.hidden_field :user_id, value: params[:user_id]
+
+  .text-muted.pull-left Datos Personales:
+  %br
+  = render '/users/form_fields'
+  .actions
+    %a.btn.btn-sm.btn-default.pull-left{data: {dismiss: 'modal'}} Cancelar
+    = f.submit 'Guardar', class: 'btn btn-primary btn-sm pull-right'
+  %br
+
+
+:javascript
+
+  $('.upcase').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().toUpperCase());
+  });
+
+
+  $('.ci').on('input',function(evt){ 
+    var node = $(this);
+    node.val(node.val().replace(/[^0-9]/g,'') );
+    });

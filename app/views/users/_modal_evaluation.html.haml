@@ -4,7 +4,7 @@
       .alert.alert-info
         %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
           %span{"aria-hidden": true} ×
-        .text-center Inscripción de usuario en Curso o Prueba
+        .text-center= "Inscripción en #{@eva_title}"
       .modal-body
         = form_tag users_record_in_evaluation_path do
           = hidden_field_tag :id, @user.id

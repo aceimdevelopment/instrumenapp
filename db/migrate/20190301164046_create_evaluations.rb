@@ -1,14 +1,15 @@
 class CreateEvaluations < ActiveRecord::Migration[5.2]
   def change
     create_table :evaluations do |t|
-      t.datetime :start, null: false
-      t.datetime :end
+      t.string :type, null: false
+      t.string :title
+      t.date :start, null: false
       t.string :location
-      t.references :language, null: false, type: :string
-      t.integer :type_evaluation, null: false
-      t.index [:language_id, :type_evaluation, :start], unique: true
+      t.references :schedule
+      t.string :cost
+      t.integer :status, default: 0
       t.timestamps
     end
-    add_foreign_key :evaluations, :languages, on_delete: :cascade,  on_update: :cascade
+    add_foreign_key :evaluations, :schedules, on_delete: :cascade,  on_update: :cascade
   end
 end

@@ -2,16 +2,6 @@
 
   %h3.text-center Ofertas:
   =# inscriptions_buttons current_user.id
+  = render '/evaluations/evaluations_links'
 
-  = link_to "#newTest", class: 'btn btn-success btn-block', "data-toggle": :modal do
-    %i.fa.fa-graduation-cap
-    Inscribir Prueba de Dominio Instrumental Idioma Extrangero
-
-  = link_to "#newCourse", class: 'btn btn-success btn-block', "data-toggle": :modal do
-    %i.fa.fa-graduation-cap
-    Realizar Curso Instrumental Inglés
-
-  = render partial: '/users/modal_evaluation', locals: {evaluations: Test.abierto, idModal: 'newTest'}
-  = render partial: '/users/modal_evaluation', locals: {evaluations: Course.abierto, idModal: 'newCourse'}
-
-= render partial: '/records/index', locals: {records: current_user.records}
+= render partial: '/inscriptions/index', locals: {inscriptions: current_user.inscriptions}

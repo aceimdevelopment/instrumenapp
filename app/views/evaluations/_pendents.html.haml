@@ -1,0 +1,17 @@
+.tabs-container
+  %ul.nav.nav-tabs{role: "tablist"}
+    %li.active
+      %a.nav-link{"data-toggle": :tab, href: "#preinscriptions"}
+        Preinscritos
+
+    %li
+      %a.nav-link{"data-toggle": :tab, href: "#confirmations"} 
+        Confirmados
+  .tab-content
+    #preinscriptions.tab-pane.active{role: :tabpanel}
+      .panel-body
+        = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.preinscrito}
+        
+    #confirmations.tab-pane{role: :tabpanel}
+      .panel-body
+        = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.inscrito}

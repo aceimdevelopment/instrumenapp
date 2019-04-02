@@ -1,15 +1,14 @@
 #confimationModal.modal.fade{"aria-hidden": "true", tabindex: '-1'}
   .modal-dialog
     .modal-content
-
       .alert.alert-info
         %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
           %span{"aria-hidden": true} ×      
         %h4.text-center
           Confirmación Inscripción
       .modal-body
-        = form_tag record_confirmation_user_path, id: 'confimation_form' do
-          = hidden_field_tag :record_id, nil
+        = form_tag confirmation_inscriptions_path, id: 'confimation_form' do
+          = hidden_field_tag :inscription_id, nil
           .form-group
             %label Número Transacción:
             = text_field_tag :baucher, nil, placeholder: '412123231', class: 'form-control', required: true

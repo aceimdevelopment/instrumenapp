@@ -1,0 +1,21 @@
+%table.table.table-hover.table-striped.table-border
+  %thead
+    %tr
+      %th Idioma
+      %th Area
+      %th Participante
+      %th Estado
+      %th
+
+
+  %tbody
+    - @inscriptions.each do |inscription|
+      %tr
+        %td= inscription.lenguage
+        %td= inscription.area
+        %td= inscription.studient
+        %td
+          = link_to inscription, method: :delete, class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+            %i.fa.fa-trash
+
+=# link_to 'Inscribir', new_preinscription_path

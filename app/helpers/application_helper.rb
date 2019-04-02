@@ -7,10 +7,10 @@ module ApplicationHelper
         end
     end
 
-    def label_state_record record
+    def label_state_record inscription
 
-        content_tag :span, class: "label label-#{record.alert_type}" do
-            capture_haml{record.state.titleize}
+        content_tag :span, class: "label label-#{inscription.alert_type}" do
+            capture_haml{inscription.status.titleize}
         end
         
     end
@@ -46,10 +46,10 @@ module ApplicationHelper
     def inscriptions_buttons id=nil
         path = id ? "&id=#{id}" : ""  
 
-        aux = link_to "#{users_evaluation_path}?test=true#{path}", class: 'btn btn-success btn-block m-b-1' do 
+        aux = link_to "#{new_inscription_path}?test=true#{path}", class: 'btn btn-success btn-block m-b-1' do 
             capture_haml{"<i class='fa fa-graduation-cap'></i> Inscribir Prueba de Dominio Instrumental Idioma Extrangero"}
         end
-        aux += link_to "#{users_evaluation_path}?course=true#{path}", class: 'btn btn-success btn-block m-b-2' do
+        aux += link_to "#{new_inscription_path}?course=true#{path}", class: 'btn btn-success btn-block m-b-2' do
             capture_haml{"<i class='fa fa-graduation-cap'></i> Realizar Curso Instrumental Inglés"}
         end
 

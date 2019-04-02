@@ -10,13 +10,17 @@
   %thead
     %tr
       %th Description
+      %th Inscripciones
       %th
       %th
 
   %tbody
     - @areas.each do |area|
+      - total = area.inscriptions.count 
       %tr
         %td= area.description
+        %td
+          %b= total
         %td
           = link_to 'javascript:void(0)', onclick: "change_form('#{area_path(area)}', '#{area.description}', 'true');", class: 'tooltip-btn float-left mr-md-3 btn btn-sm btn-outline-success', 'data_toggle': :tooltip, title: 'Editar área' do
             %i.fa.fa-pencil
@@ -24,10 +28,7 @@
           =# link_to edit_area_path(area) do
 
         %td
-          - total = area.evaluations.count 
-          - if total > 0
-            %b= total
-          - else
+          - if total < 1
             = link_to area, method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
               %i.fa.fa-trash.text-danger
 

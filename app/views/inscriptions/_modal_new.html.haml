@@ -1,0 +1,20 @@
+- if @inscription.test?
+  - eva_title = 'Prueba'
+  - languages = Language.all.order(description: :asc)
+- else
+  - eva_title = 'Curso'
+  - languages = Language.where(id: 'ING')
+
+= link_to "#new#{eva_title}", class: 'btn btn-success btn-block m-b-1', "data-toggle": :modal do
+  %i.fa.fa-graduation-cap
+  = @inscription.link_title
+
+.modal.fade{id: "new#{eva_title}", "aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×
+        .text-center= "Inscripción en #{eva_title}"
+      .modal-body
+        = render partial: '/inscriptions/form', locals: {languages: languages}

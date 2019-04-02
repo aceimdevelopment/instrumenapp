@@ -1,11 +1,17 @@
 Rails.application.routes.draw do
+  resources :inscriptions do
+    collection do
+      post 'confirmation'
+    end
+  end 
+  resources :languages
   resources :areas
+  resources :schedules
   resources :evaluations do
     member do
       get 'confirm'
     end
   end
-  resources :languages
   get '/users/evaluation'
   get '/users/destroy_record'
   post '/users/record_in_evaluation'
@@ -14,9 +20,15 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get 'reset_pw'
-      post 'record_confirmation'
     end
   end
+
+  resources :general_parameters, only: [:index] do
+    collection do
+      post 'set_value'
+    end
+  end
+
 
   resources :download, only: [:index] do
     member do 

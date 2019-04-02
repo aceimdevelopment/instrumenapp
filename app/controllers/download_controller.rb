@@ -2,7 +2,7 @@ class DownloadController < ApplicationController
 
 	def make_inscription
 		pdf = Pdf.make_inscription_flayer params[:id]
-		unless send_data pdf.render, filename: "constancia_inscripcion_#{params[:id].to_s}.pdf", type: "application/pdf", disposition: "attachment"
+		unless send_data pdf.render, filename: "planilla_inscripcion_#{params[:id].to_s}.pdf", type: "application/pdf", disposition: "attachment"
 			flash[:error] = "En estos momentos no se pueden descargar el archivo solicitado, intentelo más tarde."
 		end
 		return

@@ -1,21 +1,21 @@
 class Evaluation < ApplicationRecord
 
-  enum state: [:abierto, :confirmado]
+  # RELATIONSHIPS
 
-  belongs_to :language
-  belongs_to :area
-  
-  has_many :records
+  enum status: [:activa, :archivada]
+
+  has_many :inscriptions
+
+  belongs_to :schedule
+
+  # VALIDATIONS
 
   validates :start, presence: true
-  validates :end, presence: true
   validates :type, presence: true
-  validates :language_id, presence: true
 
-  def cost_to_bs
-    "#{cost},oo Bs."
-  end
+  before_validation :set_default_state
 
+  # PUBLIC FUNCTIONS
   def tipo
     if type.eql? 'Test'
       return 'Prueba'
@@ -26,12 +26,18 @@ class Evaluation < ApplicationRecord
     end
   end
 
-  def total_records
-  	records.count
+  def total_inscriptions
+  	inscriptions.count
   end
 
-  def description
-    "#{language.description} - #{area.description}"
+
+  # PROTECTED FUNCTIONS
+
+  protected
+
+  def set_default_state
+    self.status ||= :preinscrito
   end
+
 
 end

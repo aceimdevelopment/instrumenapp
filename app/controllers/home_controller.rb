@@ -13,6 +13,9 @@ class HomeController < ApplicationController
 
     @mainTitle = "Cursos y Pruebas Instrumentales"
     @mainDesc = "Dominio Instrumental de Idiomas Extrangeros"
+    @inscription = Inscription.new
+    @user = Student.new
+    @is_new = true
   end
 
 
@@ -29,7 +32,7 @@ class HomeController < ApplicationController
   
       flash[:success] = "¡Bienvenido #{user.name}!" 
       if current_user.is_admin?
-        redirect_to admins_session_path
+        redirect_to general_parameters_path
       else
         redirect_to students_session_path
       end

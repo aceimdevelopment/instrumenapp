@@ -1,0 +1,13 @@
+#evaModal.modal.fade{"aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×      
+        %h4#titleEva.text-center
+          Nueva Evaluación
+      .modal-body
+        = render '/evaluations/form'
+
+
+

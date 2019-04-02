@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Lenguage:
+  = @inscription.lenguage
+%p
+  %b Area:
+  = @inscription.area
+%p
+  %b Studient:
+  = @inscription.studient
+
+= link_to 'Edit', edit_inscription_path(@inscription)
+\|
+= link_to 'Back', inscriptions_path

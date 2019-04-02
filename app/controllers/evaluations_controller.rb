@@ -3,9 +3,56 @@ class EvaluationsController < ApplicationController
 
   # GET /evaluations
   # GET /evaluations.json
+  def archive_old_test
+    Evaluation.activa.where("start < #{Date.today}").each do |a| 
+      a.status = :archivada 
+      a.save
+    end
+  end
+
   def index
-    @tests = Test.abierto.limit(50).order(['state ASC','start DESC'])
-    @courses = Course.abierto.limit(50).order(['state ASC','start DESC'])
+    if params[:type].eql? 'test'
+      @inscriptions = Inscription.test.pendents
+      @schedules = Schedule.prueba
+      @title = "Pruebas"
+
+      archive_old_test
+
+      next_testday = Inscription.next_saturday_testday
+      
+      @actives = Test.activa.where("start > #{next_testday}")
+
+      if @actives.count < 1
+        @test = Test.new
+        cost = GeneralParameter.costo_prueba.value
+        schedule = GeneralParameter.horario_prueba.value
+        location = GeneralParameter.ubicacion_prueba
+
+        @test.start = next_testday
+        @test.cost = cost
+        @test.schedule_id = schedule
+        @test.location = location
+
+        @test.save
+      end
+      @actives = Test.activa.where(start: next_testday)
+      # @evaluation = Evaluation.find 1 #@actives.first.id
+
+    elsif params[:type].eql? 'course'
+      @title = "Cursos"
+      @inscriptions = Inscription.course.pendents
+      @actives = Course.activa
+      @schedules = Schedule.curso
+    else
+      @title = "Evaluaciones"
+      @actives = Evaluation.activa
+      @inscriptions = Inscription.pendents.limit(50)
+      @schedules = Schedule.all
+    end
+    # @evaluation = Evaluation.new
+    @evaluation = Evaluation.first# 1 #@actives.first.id
+
+
   end
 
   # GET /evaluations/1
@@ -35,7 +82,7 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.new(evaluation_params)
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to evaluations_path, notice: 'Evaluation creada con éxito.' }
+        format.html { redirect_to evaluations_path, notice: 'Evaluación creada con éxito.' }
         format.json { render :show, status: :created, location: @evaluation }
       else
         flash[:danger] =  @evaluation.errors.full_messages.to_sentence
@@ -48,16 +95,13 @@ class EvaluationsController < ApplicationController
   # PATCH/PUT /evaluations/1
   # PATCH/PUT /evaluations/1.json
   def update
-    respond_to do |format|
-      if @evaluation.update(evaluation_params)
-        format.html { redirect_to evaluations_path, notice: 'Evaluation actualizada con éxito.' }
-        format.json { render :show, status: :ok, location: @evaluation }
-      else
-        flash[:danger] =  @evaluation.errors.full_messages.to_sentence
-        format.html { redirect_to evaluations_path}
-        format.json { render json: @evaluation.errors, status: :unprocessable_entity }
-      end
+    if @evaluation.update(evaluation_params)
+      flash[:success] = 'Evaluación actualizada con éxito.'
+    else
+      flash[:danger] =  @evaluation.errors.full_messages.to_sentence
     end
+
+    redirect_back fallback_location: evaluations_path
   end
 
   # DELETE /evaluations/1
@@ -65,7 +109,7 @@ class EvaluationsController < ApplicationController
   def destroy
     @evaluation.destroy
     respond_to do |format|
-      format.html { redirect_to evaluations_url, notice: 'Prueba eliminda con éxito.' }
+      format.html { redirect_to evaluations_url, notice: 'Evaluación eliminda con éxito.' }
       format.json { head :no_content }
     end
   end
@@ -78,10 +122,10 @@ class EvaluationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def evaluation_params
-      if params[:duration]
-        a = DateTime.parse params[:evaluation][:start]
-        params[:evaluation][:end] = (a + params[:duration].to_i.hours).to_s
-      end
-      params.require(:evaluation).permit(:start, :end, :location, :language_id, :type, :area_id)
+      # if params[:duration]
+      #   a = DateTime.parse params[:evaluation][:start]
+      #   params[:evaluation][:end] = (a + params[:duration].to_i.hours).to_s
+      # end
+      params.require(:evaluation).permit(:start, :title, :location, :type, :schedule, :cost, :status)
     end
 end

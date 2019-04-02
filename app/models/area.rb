@@ -1,5 +1,5 @@
 class Area < ApplicationRecord
-	has_many :evaluations
+	has_many :inscriptions
 
 	validates :description, presence: true, uniqueness: { case_sensitive: false }
 

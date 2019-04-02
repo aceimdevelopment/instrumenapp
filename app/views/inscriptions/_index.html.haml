@@ -1,0 +1,50 @@
+
+- if inscriptions.count > 0
+  / %h2#Evaluaciones:
+  %table.table.table-hover.table-striped.table-border
+    %thead
+      %tr
+        - if current_user.is_admin?
+          %th Participante
+        %th Idioma
+        %th Área
+        %th Tipo
+        - if current_user.is_admin?
+          %th Baucher
+        %th Estado
+        %th 
+    %tbody
+      - inscriptions.each do |ins| 
+        %tr
+          - if current_user.is_admin?
+            %td= ins.user.description
+          %td= ins.language.description.titleize
+          %td= ins.area.description.titleize
+          %td= ins.tipo.titleize
+          - if current_user.is_admin?
+            %td= ins.baucher
+          %td= label_state_record ins
+          - if current_user.is_admin?
+            - if ins.preinscrito?
+              %td
+                .tooltip-btn{'data-toggle': :tooltip, title: 'Confirmar Inscripción'}
+                  = link_to '#confimationModal', class: 'badge badge-primary', "data-toggle": :modal, onclick: "$('#confimation_form #inscription_id').val('#{ins.id}');" do
+                    %i.fa.fa-check
+            %td
+              = link_to ins, method: :delete, class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
+                %i.fa.fa-trash
+
+          - if ins.preinscrito? and ins.evaluation
+            %td
+              = link_to make_inscription_download_path(ins.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Planilla Inscripción', target: "_blank" do
+                %i.fa.fa-download
+                Ins
+          - if ins.aprobado?
+            %td
+              = link_to '#', class: 'btn btn-xs btn-primary' do
+                %i.fa.fa-download
+                Constancia de Aprobación
+
+- if current_user.is_admin?
+  = render '/users/confirmation_modal'
+

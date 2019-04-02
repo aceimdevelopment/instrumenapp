@@ -1,4 +1,9 @@
-%h1 
+
+
+%h1
+  = link_to new_language_path, class: 'btn btn-sm btn-primary m-r-1' do
+    %i.fa.fa-plus
+    Idioma
   %i.fa.fa-language
   Idiomas
 
@@ -7,27 +12,22 @@
     %tr
       %th Id
       %th Descripción
+      %th Inscripciones
       %th
       %th
 
   %tbody
     - @languages.each do |language|
+      - total = language.inscriptions.count
       %tr
         %td= language.id
         %td= language.description
         %td
+          %b= total
+        %td
           = link_to edit_language_path(language) do
             %i.fa.fa-pencil
         %td
-          - total = language.evaluations.count
-          - if total > 0
-            %b.tooltip-btn.tooltip-demo{ 'data_toggle': :tooltip, title: 'Total Cursos y/o Pruebas'}
-              = total
-          - else
+          - if total < 1
             = link_to language, method: :delete, data: { confirm: 'Esta acción es irrevarsible, ¿Está seguro?' }, class: 'text-danger' do
               %i.fa.fa-trash
-%br
-
-= link_to new_language_path, class: 'btn btn-sm btn-primary' do
-  %i.fa.fa-plus
-  Nuevo Idioma

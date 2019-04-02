@@ -1,21 +1,67 @@
 %h1
   %i.fa.fa-graduation-cap
-  Cursos y Pruebas
-.tabs-container
-  %ul.nav.nav-tabs{role: "tablist"}
-    %li
-      %a.nav-link{"data-toggle": :tab, href: "#tests"}
-        %i.fa.fa-shower
-        Pruebas
-    %li
-      %a.nav-link{"data-toggle": :tab, href: "#courses"} 
-        %i.fa.fa-bath
-        Cursos
-  .tab-content
-    #tests.tab-pane{role: :tabpanel}
-      .panel-body
-        = render partial: '/evaluations/list', locals: {evaluations: @tests, type: 'Prueba'}
-    #courses.tab-pane{role: :tabpanel}
-      .panel-body
-        = render partial: '/evaluations/list', locals: {evaluations: @courses, type: 'Curso'}
-%br
+  =@title
+  - if params[:type].eql? 'course'
+    = link_to 'javascript:void(0)', class: 'btn btn-primary btn-sm m-r-1', onclick: "change_eva('#{areas_path}', 'Course')" do
+      %i.fa.fa-plus
+      Área
+
+- if @actives.count > 0
+  .alert-info.p-1.m-b-1
+    %h3= "#{@title} Activas:"
+    - @actives.each do |eva|
+      %table.table.table-condensed.table-border
+        %tr
+          %th Fecha
+          %th Ubicación
+          %th Horario
+          %th Costo
+          %th Estado
+          %th
+        %tr
+          %td= eva.start
+          %td= eva.location
+          %td= eva.schedule.description
+          %td= eva.cost
+          %td= eva.status.titleize
+          %td
+            
+            = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}',true);", class: 'tooltip-btn float-left mr-md-3 btn btn-sm btn-outline-success', 'data_toggle': :tooltip, title: "Editar #{@title}"  do
+              %i.fa.fa-pencil
+
+
+= render '/evaluations/modal_form'
+= render '/evaluations/pendents'#, locals: {inscriptions: Inscription.course.pendents}
+
+:javascript
+
+  function change_eva(url, type, id = '', location = '', schedule_id = '', cost = '', edit = false){
+    var form_area = $('#new_evaluation');
+    form_area.attr("action", url);
+    form_area.find('#evaluation_location').val(location);
+    form_area.find('#evaluation_cost').val(cost);
+    form_area.find('#evaluation_schedule_id').val(schedule_id);
+    form_area.find('#evaluation_type').val(type);
+    form_area.find('#labelStart').hide();
+
+    if (edit == true) {
+      $('#titleEva').html('Editar Evaluación');
+      form_area.append("<input type='hidden' name='_method' value='patch' id='inputEdit'>");
+      form_area.append("<input type='hidden' name='id' value=id id='evaluation_id'>");
+
+      form_area.find('#evaluation_start').prop('disabled', true);
+      form_area.find('#evaluation_start').hide();
+    }else{
+      $('#titleEva').html('Nueva Área');
+      $('#inputEdit').remove();
+      form_area.find('#evaluation_start').prop('disabled', false);
+      form_area.find('#evaluation_id').prop('disabled', true);
+      form_area.find('#evaluation_start').show();
+      form_area.find('#labelStart').show();
+
+      //$('#inputEdit').val('');
+      //$('#inputEdit').attr('name', '');
+    }
+    $('#evaModal').modal();
+
+  }

@@ -23,9 +23,13 @@
             %span.nav-label Principal
 
         %li{:class => "#{'active' if controller_name.eql? ('evaluations') }"}
-          = link_to evaluations_path do
+          = link_to nil do
             %i.fa.fa-graduation-cap
-            %span.nav-label Cursos/Pruebas
+            %span.nav-label Evaluaciones
+          %ul.nav.nav-second-level.collapse.in
+            %li= link_to 'Pruebas', "#{evaluations_path}?type=test"
+            %li= link_to 'Cursos', "#{evaluations_path}?type=course"
+            
         %li{:class => "#{'active' if controller_name.eql? ('areas') }"}
           = link_to areas_path do
             %i.fa.fa-cubes
@@ -34,7 +38,15 @@
           = link_to languages_path do
             %i.fa.fa-language
             %span.nav-label Idiomas
+        %li{:class => "#{'active' if controller_name.eql? ('shcedules') }"}
+          = link_to schedules_path do
+            %i.fa.fa-clock-o
+            %span.nav-label Horarios
         %li{:class => "#{'active' if controller_name.eql? ('users') }"}
           = link_to users_path do
             %i.fa.fa-users
             %span.nav-label Usuarios
+        %li{:class => "#{'active' if controller_name.eql? ('general_parameters') }"}
+          = link_to general_parameters_path do
+            %i.fa.fa-cogs
+            %span.nav-label Parámetros Generales
