@@ -1,5 +1,5 @@
 -# @evaluation = Evaluation.first
-= form_for Evaluation.new do |f|
+= form_for @evaluation do |f|
   = f.hidden_field :type
 
   .form-group
@@ -13,8 +13,8 @@
     = f.collection_select :schedule_id, @schedules, :id, :description, {include_blank: 'Seleccione Horario...'}, {class: 'form-control', required: true}
   .form-group
     = f.label :cost, value: 'Costo:'
-    = f.text_field :cost, class: 'form-control', placeholder: 'Costo'
-
+    %i.text-muted Recuerde Incuir el monto con la unidad
+    = f.text_field :cost, class: 'form-control', placeholder: '10000 Bs.'
   .modal-footer 
     %a.btn.btn-sm.btn-default{data: {dismiss: 'modal'}} Cancelar
     = f.submit 'Guardar', class: 'btn btn-sm btn-primary'

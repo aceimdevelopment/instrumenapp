@@ -15,3 +15,6 @@
     #confirmations.tab-pane{role: :tabpanel}
       .panel-body
         = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.inscrito}
+
+- if current_user.is_admin?
+  = render '/users/confirmation_modal'

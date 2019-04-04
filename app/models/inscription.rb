@@ -17,15 +17,6 @@ class Inscription < ApplicationRecord
 
   scope :pendents, -> {where('status = 0 || status = 1')}
 
-  def self.next_saturday_testday
-      wtoday = Time.now.wday
-
-      next_test = 6 - wtoday
-      next_test += 7 if wtoday > 3
-      " -#{next_test}- ".center(200, "*")
-      return Date.today+next_test.days
-  end
-
 
   def link_title
     if self.test?

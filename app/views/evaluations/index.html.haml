@@ -1,33 +1,38 @@
 %h1
   %i.fa.fa-graduation-cap
   =@title
-  - if params[:type].eql? 'course'
-    = link_to 'javascript:void(0)', class: 'btn btn-primary btn-sm m-r-1', onclick: "change_eva('#{areas_path}', 'Course')" do
-      %i.fa.fa-plus
-      Área
+  = link_to 'javascript:void(0)', class: 'btn btn-primary btn-sm m-r-1', onclick: "change_eva('#{evaluations_path}', '#{@evaluation.type}')" do
+    %i.fa.fa-plus
+    =@title
 
 - if @actives.count > 0
-  .alert-info.p-1.m-b-1
+  .p-1.m-b-1
     %h3= "#{@title} Activas:"
-    - @actives.each do |eva|
-      %table.table.table-condensed.table-border
-        %tr
-          %th Fecha
-          %th Ubicación
-          %th Horario
-          %th Costo
-          %th Estado
-          %th
-        %tr
-          %td= eva.start
-          %td= eva.location
-          %td= eva.schedule.description
-          %td= eva.cost
-          %td= eva.status.titleize
+    %table.table.table-condensed.table-striped.table-hover
+      - @actives.each do |eva|
+        %tr.success
           %td
-            
-            = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}',true);", class: 'tooltip-btn float-left mr-md-3 btn btn-sm btn-outline-success', 'data_toggle': :tooltip, title: "Editar #{@title}"  do
+            %b Fecha:
+            = l eva.start, format: '%d %b %Y'
+          %td
+            %b Ubicación:
+            = eva.location
+          %td
+            %b Horario:
+            = eva.schedule.description
+          %td
+            %b Costo:
+            = eva.cost
+          %td
+            %b Estado:
+            = eva.status.titleize
+          %td            
+            = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}',true);", class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Editar #{@title.singularize}"  do
               %i.fa.fa-pencil
+          - if eva.inscriptions.count < 1
+            %td
+              = link_to evaluation_path(eva), method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' }, class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Eliminar #{@title.singularize}" do
+                %i.fa.fa-trash.text-danger
 
 
 = render '/evaluations/modal_form'
@@ -52,7 +57,7 @@
       form_area.find('#evaluation_start').prop('disabled', true);
       form_area.find('#evaluation_start').hide();
     }else{
-      $('#titleEva').html('Nueva Área');
+      $('#titleEva').html('Nueva Evaluación');
       $('#inputEdit').remove();
       form_area.find('#evaluation_start').prop('disabled', false);
       form_area.find('#evaluation_id').prop('disabled', true);

@@ -34,7 +34,7 @@
               = link_to ins, method: :delete, class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
                 %i.fa.fa-trash
 
-          - if ins.preinscrito? and ins.evaluation
+          - if ins.preinscrito? and ins.test? #and ins.evaluation
             %td
               = link_to make_inscription_download_path(ins.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Planilla Inscripción', target: "_blank" do
                 %i.fa.fa-download
@@ -45,6 +45,6 @@
                 %i.fa.fa-download
                 Constancia de Aprobación
 
-- if current_user.is_admin?
+- if false# current_user.is_admin?
   = render '/users/confirmation_modal'
 

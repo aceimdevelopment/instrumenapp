@@ -3,8 +3,8 @@
   Configuración General
 
 .text-center.alert.alert-danger
-  %b.text-muted
-    VALORES POR DEFECTO A SER USADOS AL MOMENTO DE GENERAR AUTOMÁTICAMENTE LAS PRUEBAS Y/O CURSOS
+  %b ¡ATENCIÓN!
+  Los valores proporcionados en esta página serán tomados en la generación automática de las pruebas y/o cursos que así lo requieran.
 
 %table.table.table-striped.table-sm.table-hover
   %thead
@@ -25,7 +25,8 @@
 
         %td 
           - if param.id.eql? GeneralParameter::HORARIO_PRUEBA
-            = Schedule.find(param.value).description
+            - aux = Schedule.where(id: param.value).first
+            = aux.description if aux
           - else
             = param.value
         %td

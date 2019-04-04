@@ -23,12 +23,12 @@
             %span.nav-label Principal
 
         %li{:class => "#{'active' if controller_name.eql? ('evaluations') }"}
-          = link_to nil do
+          %a
             %i.fa.fa-graduation-cap
             %span.nav-label Evaluaciones
           %ul.nav.nav-second-level.collapse.in
-            %li= link_to 'Pruebas', "#{evaluations_path}?type=test"
-            %li= link_to 'Cursos', "#{evaluations_path}?type=course"
+            %li{:class => "#{'active' if (params[:type] and params[:type].eql?('test')) }"}= link_to 'Pruebas', "#{evaluations_path}?type=test"
+            %li{:class => "#{'active' if (params[:type] and params[:type].eql?('course')) }"}= link_to 'Cursos', "#{evaluations_path}?type=course"
             
         %li{:class => "#{'active' if controller_name.eql? ('areas') }"}
           = link_to areas_path do

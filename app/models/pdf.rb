@@ -108,9 +108,17 @@ class Pdf
 	data = [["<i>Participante:</i>", "<b>#{inscription.user.description if inscription.user}</b>"]]
 	data << ["<i>#{inscription.tipo}:</i>", "<b>#{inscription.description}</b>"]
 
+	if eva = inscription.evaluation
+		data << ["<i>Horario:</i>", "<b>#{eva.schedule.description}</b>"] if eva.schedule
+		data << ["<i>Ubicación:</i>", "<b>#{eva.location}</b>"] 
+		data << ["<i>Fecha:</i>", "<b>#{eva.start_to_local}</b>"] 
+	else
+        location = GeneralParameter.ubicacion_prueba
+        schedule = Schedule.get_default_test_schedule 
 
-	data << ["<i>Horario:</i>", "<b>_________________________</b>"]
-	data << ["<i>Ubicación:</i>", "<b>#{inscription.evaluation.location}</b>"] if inscription.evaluation
+		data << ["<i>Horario:</i>", "<b>#{schedule.description}</b>"] if schedule
+		data << ["<i>Ubicación:</i>", "<b>#{location.value}</b>"] if location
+	end
 
 	t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})
 	t.draw
@@ -126,7 +134,9 @@ class Pdf
 
 	data = [["<i>Cuenta:</i>", "<b>Cuenta Corriente # 0102-0140-34000442688-4 del Banco de Venezuela</b>"]]
 	data << ["<i>A nombre de:</i>", "FUNDEIM (RIF: J-30174529-9)"]
-	data << ["<i>Monto:</i>", "#{inscription.evaluation.cost}"] if inscription.evaluation
+	cost = inscription.evaluation ? inscription.evaluation.cost : GeneralParameter.costo_prueba
+
+	data << ["<i>Monto:</i>", "#{cost}"]
 	data << ["<i>Transacción:</i>", "_________________________ Tipo: T ____ D____ P ____"]
 
 	t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})

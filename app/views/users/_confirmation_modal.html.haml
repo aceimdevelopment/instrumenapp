@@ -10,6 +10,9 @@
         = form_tag confirmation_inscriptions_path, id: 'confimation_form' do
           = hidden_field_tag :inscription_id, nil
           .form-group
+            %label Evaluación:
+            - first_id = @actives.first.id if @actives.first
+            = collection_select nil, :evaluation_id, @actives, :id, :description, {selected: first_id}, {class: 'form-control', required: true}
             %label Número Transacción:
             = text_field_tag :baucher, nil, placeholder: '412123231', class: 'form-control', required: true
           .form-group

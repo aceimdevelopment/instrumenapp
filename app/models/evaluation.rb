@@ -15,6 +15,27 @@ class Evaluation < ApplicationRecord
 
   before_validation :set_default_state
 
+  scope :old_eva, -> {where("start < '#{Date.today}'")}
+  scope :next_eva, -> {where("start >= '#{Date.today}'")}
+
+  def self.archive_old_eva
+    self.activa.old_eva.each do |a| 
+      a.status = :archivada 
+      a.save
+    end
+  end
+
+  def start_to_local format_default = nil
+    format_default = '%d %b %Y' if format_default.blank?
+    I18n.l(start, format: format_default)
+  end
+
+  def description
+    # "#{hour} - #{location} - #{schedule.description if schedule}"
+    "#{I18n.l(start, format: '%d %b %Y')} - #{location} - #{schedule.description if schedule}"
+
+  end
+
   # PUBLIC FUNCTIONS
   def tipo
     if type.eql? 'Test'

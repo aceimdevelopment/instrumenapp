@@ -42,13 +42,10 @@ class InscriptionsController < ApplicationController
   end
 
   def confirmation
-
     @inscription = Inscription.find params[:inscription_id]
-
-    evaluation = Evaluation.find params[:evaluation_id]
-
     @inscription.baucher = params[:baucher]
     @inscription.status = :inscrito
+    @inscription.evaluation_id = params[:evaluation_id]
     if @inscription.save
       flash[:success] = '¡Inscripción confirmada!'
     else
