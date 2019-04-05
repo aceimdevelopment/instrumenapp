@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_01_214617) do
+ActiveRecord::Schema.define(version: 2019_04_05_135127) do
+
+  create_table "area_courses", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "area_id", null: false
+    t.index ["area_id", "course_id"], name: "index_area_courses_on_area_id_and_course_id"
+    t.index ["course_id", "area_id"], name: "index_area_courses_on_course_id_and_area_id"
+  end
 
   create_table "areas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "description", null: false

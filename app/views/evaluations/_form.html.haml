@@ -15,6 +15,19 @@
     = f.label :cost, value: 'Costo:'
     %i.text-muted Recuerde Incuir el monto con la unidad
     = f.text_field :cost, class: 'form-control', placeholder: '10000 Bs.'
+
+  - if params[:type].eql? 'course'
+    .form-group
+      %label Areas con inscritos:
+      .form-control
+        - Area.preinsc_pendents.order('description ASC').uniq.each do |a| 
+          %label.tooltip-btn{'data_toggle': :tooltip, title: a.description}
+            .btn.btn-xs.btn-primary
+              = check_box_tag 'areas[]', a.id, nil
+              = a.description
+              = "(#{a.inscriptions.course.preinscrito.count})"
+
+
   .modal-footer 
     %a.btn.btn-sm.btn-default{data: {dismiss: 'modal'}} Cancelar
     = f.submit 'Guardar', class: 'btn btn-sm btn-primary'

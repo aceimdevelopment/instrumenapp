@@ -33,12 +33,12 @@
             %td
               = link_to ins, method: :delete, class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
                 %i.fa.fa-trash
-
-          - if ins.preinscrito? and ins.test? #and ins.evaluation
+          - dw = Course.actives_areas_ids.include? ins.area_id 
+          - if ins.preinscrito? and (ins.test? or (ins.course? and dw)) #and ins.evaluation
             %td
-              = link_to make_inscription_download_path(ins.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Planilla Inscripción', target: "_blank" do
+              = link_to make_inscription_download_path(ins.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Planilla Preinscripción', target: "_blank" do
                 %i.fa.fa-download
-                Ins
+                Preins
           - if ins.aprobado?
             %td
               = link_to '#', class: 'btn btn-xs btn-primary' do

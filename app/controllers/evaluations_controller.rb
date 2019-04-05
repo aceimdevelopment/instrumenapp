@@ -15,9 +15,9 @@ class EvaluationsController < ApplicationController
       @title = "Pruebas"
       @evaluation.type = 'Test'
       @evaluation.start = Test.next_saturday_test
-      @evaluation.cost = GeneralParameter.costo_prueba.value
-      @evaluation.schedule_id = GeneralParameter.horario_prueba.value
-      @evaluation.location = GeneralParameter.ubicacion_prueba.value
+      @evaluation.cost = GeneralParameter.costo_prueba.value if GeneralParameter.costo_prueba
+      @evaluation.schedule_id = GeneralParameter.horario_prueba.value if GeneralParameter.horario_prueba
+      @evaluation.location = GeneralParameter.ubicacion_prueba.value if GeneralParameter.ubicacion_prueba
       begin
         Test.check_actives_tests
       rescue Exception => e
@@ -70,6 +70,11 @@ class EvaluationsController < ApplicationController
 
     if @evaluation.save
       flash[:success] = 'Evaluación creada con éxito.'
+      if @evaluation.is_a? Course and params[:areas]
+        params[:areas].each do |a|
+          @evaluation.area_courses.create(area_id: a)
+        end
+      end
     else
       flash[:danger] = "Error: #{@evaluation.errors.full_messages.to_sentence}"
     end
@@ -93,6 +98,7 @@ class EvaluationsController < ApplicationController
   # DELETE /evaluations/1
   # DELETE /evaluations/1.json
   def destroy
+    @evaluation.area_courses.delete_all
     @evaluation.destroy
     flash[:info] = "¡Evaluación Eliminada!"
     redirect_back fallback_location: evaluations_path
