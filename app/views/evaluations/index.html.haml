@@ -15,8 +15,13 @@
             %b Fecha:
             = l eva.start, format: '%d %b %Y'
           %td
+            %b Inscritos:
+            = eva.inscriptions.count
+
+          %td
             %b Ubicación:
             = eva.location
+
           %td
             %b Horario:
             = eva.schedule.description
