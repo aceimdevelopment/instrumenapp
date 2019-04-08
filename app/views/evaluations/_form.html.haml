@@ -2,8 +2,13 @@
 = form_for @evaluation do |f|
   = f.hidden_field :type
 
+  - if params[:type].eql? 'course'
+    .form-group
+      = f.label :start, value: 'Título:'
+      = f.text_field :title, class: 'form-control'
+
   .form-group
-    = f.label :start, value: 'Empieza:', id: 'labelStart'
+    = f.label :start, value: 'Fecha:', id: 'labelStart'
     = f.date_field :start, class: 'form-control', required: true
   .form-group
     = f.label :location, value: 'Ubicación:'
@@ -26,7 +31,6 @@
               = check_box_tag 'areas[]', a.id, nil
               = a.description
               = "(#{a.inscriptions.course.preinscrito.count})"
-
 
   .modal-footer 
     %a.btn.btn-sm.btn-default{data: {dismiss: 'modal'}} Cancelar

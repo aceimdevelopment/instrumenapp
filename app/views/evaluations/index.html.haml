@@ -7,13 +7,13 @@
 
 - if @actives.count > 0
   .p-1.m-b-1
-    %h3= "#{@title} Activas:"
+    %h3= "#{@title}:"
     %table.table.table-condensed.table-striped.table-hover
       - @actives.each do |eva|
         %tr.success
           %td
             %b Fecha:
-            = l eva.start, format: '%d %b %Y'
+            = eva.start_to_local
           %td
             %b Inscritos:
             = eva.inscriptions.count
@@ -59,8 +59,6 @@
       form_area.append("<input type='hidden' name='_method' value='patch' id='inputEdit'>");
       form_area.append("<input type='hidden' name='id' value=id id='evaluation_id'>");
 
-      form_area.find('#evaluation_start').prop('disabled', true);
-      form_area.find('#evaluation_start').hide();
     }else{
       $('#titleEva').html('Nueva Evaluación');
       $('#inputEdit').remove();

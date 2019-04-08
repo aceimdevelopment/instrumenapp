@@ -69,7 +69,7 @@ class InscriptionsController < ApplicationController
     @student.email = params[:user][:email]
     @student.phone = params[:user][:phone]
 
-    if @student.new_record?
+    if true #@student.new_record?
       @student.password = params[:user][:password]
       @student.password_confirmation = params[:user][:password_confirmation]
     end
@@ -84,18 +84,19 @@ class InscriptionsController < ApplicationController
       @inscription.user_id = @student.id if @student
 
       if @inscription.save
-        have_inscription = true 
-        flash[:info] = 'Estudiante registrado'
+        have_inscription = true
         if @inscription.course?
-          flash[:success] = "¡Preinscrito exitosamente! Manténgase atento e ingrese a su session de usuario con regularidad. En cuanto su curso cuente con el kuorum suficiente se le permitirá descargar la planilla y continuar el proceso de inscripción."
+          flash[:success] = "¡Preinscrito exitosamente! Manténgase atento e ingrese a su session de usuario con regularidad. En cuanto su curso cuente con el quorum suficiente se le informará y se le permitirá descargar la planilla para continuar el proceso de inscripción."
         else
-          flash[:success] = "¡Preinscrito exitosamente! Descargue su planilla de preinscripción"
+          flash[:success] = "¡Preinscrito exitosamente! Descargue <a target='_blank' href='/download/#{@inscription.id}/make_inscription' ><i class='fa fa-download'></i>
+aquí</a> su planilla de preinscripción."
         end 
 
       else
         flash[:danger] = "No fue posible registrar al estudiante: #{@inscription.errors.full_messages.to_sentence}"
       end
     end
+
 
     if have_inscription
 
@@ -130,10 +131,8 @@ class InscriptionsController < ApplicationController
   # DELETE /inscriptions/1.json
   def destroy
     @inscription.destroy
-    respond_to do |format|
-      format.html { redirect_to inscriptions_url, notice: 'Inscription was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:info] = 'Inscripción eliminada con éxito!'
+    redirect_back fallback_location: "#{evaluations_path}?type=test"
   end
 
   private

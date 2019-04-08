@@ -26,13 +26,13 @@ class Evaluation < ApplicationRecord
   end
 
   def start_to_local format_default = nil
-    format_default = '%d %b %Y' if format_default.blank?
-    I18n.l(start, format: format_default)
+    format_default = '%a, %d %b %Y' if format_default.blank?
+    I18n.l(start, format: format_default).titleize
   end
 
   def description
     # "#{hour} - #{location} - #{schedule.description if schedule}"
-    "#{I18n.l(start, format: '%d %b %Y')} - #{location} - #{schedule.description if schedule}"
+    "#{self.start_to_local} - #{location} - #{schedule.description if schedule}"
 
   end
 

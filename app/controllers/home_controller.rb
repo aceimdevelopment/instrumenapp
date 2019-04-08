@@ -12,7 +12,7 @@ class HomeController < ApplicationController
     flash[:notice] = aux4
 
     @mainTitle = "Cursos y Pruebas Instrumentales"
-    @mainDesc = "Dominio Instrumental de Idiomas Extrangeros"
+    @mainDesc = "Dominio Instrumental de Idiomas Extranjeros"
     @inscription = Inscription.new
     @user = Student.new
     @is_new = true

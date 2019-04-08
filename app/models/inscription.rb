@@ -20,7 +20,7 @@ class Inscription < ApplicationRecord
 
   def link_title
     if self.test?
-      "Inscribir Prueba de Dominio Instrumental Idioma Extrangero"
+      "Inscribir Prueba de Dominio Instrumental de Idiomas Extranjeros para Postgrados"
     elsif self.course?
       "Realizar Curso Instrumental Inglés"
     else
@@ -31,9 +31,9 @@ class Inscription < ApplicationRecord
 
   def description
     aux = ""
-    aux = "#{evaluation.title} - " if evaluation and evaluation.title
-    aux += "#{language.description.titleize} - " if language.description
-    aux += "#{area.description.titleize}" if area.description
+    aux += "#{language.description.titleize}" if language.description
+    aux += " - #{area.description.titleize}" if area.description
+    aux = ": #{evaluation.title}" if evaluation and evaluation.title
     return aux
   end
 

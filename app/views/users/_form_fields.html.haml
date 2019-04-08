@@ -20,5 +20,8 @@
   .form-group
     %label Confirmación de Contraseña:
     = password_field_tag 'user[password_confirmation]', nil, class: 'form-control', required: true
+- else
+  = hidden_field_tag 'user[password]', @user.password
+
 
 
