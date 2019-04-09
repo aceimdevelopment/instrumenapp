@@ -1,5 +1,7 @@
 class DownloadController < ApplicationController
 
+	before_action :login_filter
+
 	def make_inscription
 		pdf = Pdf.make_inscription_flayer params[:id]
 		unless send_data pdf.render, filename: "planilla_inscripcion_#{params[:id].to_s}.pdf", type: "application/pdf", disposition: "attachment"
@@ -9,7 +11,7 @@ class DownloadController < ApplicationController
 	end
 
 	def make_evaluation_list
-		pdf = Pdf.records params[:id]
+		pdf = Pdf.inscriptions params[:id]
 		unless send_data pdf.render, filename: "list_evaluacion_#{params[:id].to_s}.pdf", type: "application/pdf", disposition: "attachment"
 			flash[:error] = "En estos momentos no se pueden descargar el archivo solicitado, intentelo más tarde."
 		end

@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :reset_pw]
 
+  before_action :login_filter
+  before_action :admin_filter
+
   layout 'visitors', only: [:evaluation]
   # GET /users
   # GET /users.json

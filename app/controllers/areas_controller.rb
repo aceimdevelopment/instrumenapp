@@ -1,6 +1,9 @@
 class AreasController < ApplicationController
   before_action :set_area, only: [:show, :edit, :update, :destroy]
 
+  before_action :login_filter
+  before_action :admin_filter
+
   # GET /areas
   # GET /areas.json
   def index

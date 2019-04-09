@@ -1,5 +1,8 @@
 class GeneralParametersController < ApplicationController
 
+  before_action :login_filter
+  before_action :admin_filter
+
   def index
     @gen_params = GeneralParameter.all#.reject{|obj| obj.id.eql? 'HORARIO_PRUEBA'}
   end

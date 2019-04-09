@@ -1,6 +1,10 @@
 class InscriptionsController < ApplicationController
-  before_action :set_inscription, only: [:show, :edit, :update, :destroy]
+  before_action :set_inscription, only: [:show, :edit, :update, :destroy, :update_evaluation]
   layout 'visitors', only: [:new]
+
+
+  before_action :login_filter
+  
   # GET /inscriptions
   # GET /inscriptions.json
   def index
@@ -115,6 +119,16 @@ aquí</a> su planilla de preinscripción."
 
   # PATCH/PUT /inscriptions/1
   # PATCH/PUT /inscriptions/1.json
+  def update_evaluation
+    @inscription.evaluation_id = params[:evaluation_id]
+    if @inscription.save
+      flash[:success] = "Actualizada Inscripción"
+    else
+      flash[:danger] = "#{@inscription.erros.full_messages.to_sentence}"
+    end
+    redirect_back fallback_location: "#{evaluations_path}?type=test"
+  end
+
   def update
     respond_to do |format|
       if @inscription.update(inscription_params)
