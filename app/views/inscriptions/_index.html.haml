@@ -27,7 +27,7 @@
             %td= ins.baucher
           %td= label_state_record ins
           - if current_user.is_admin?
-            - if ins.preinscrito?
+            - if ins.preinscrito? and @actives.count > 0
               %td
                 .tooltip-btn{'data-toggle': :tooltip, title: 'Confirmar Inscripción'}
                   = link_to '#confimationModal', class: 'badge badge-primary', "data-toggle": :modal, onclick: "$('#confimation_form #inscription_id').val('#{ins.id}');" do
