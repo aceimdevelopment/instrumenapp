@@ -16,7 +16,8 @@
             = eva.start_to_local
           %td
             %b Inscritos:
-            = eva.inscriptions.count
+            - total = eva.inscriptions.count
+            = link_to_if total > 0, total, make_evaluation_list_download_path(eva.id)
 
           %td
             %b Ubicación:
@@ -34,6 +35,12 @@
           %td            
             = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}',true);", class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Editar #{@title.singularize}"  do
               %i.fa.fa-pencil
+          - if total > 0
+            %td
+              = link_to make_evaluation_list_download_path(eva.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Lista de Secciones', target: "_blank" do
+                %i.fa.fa-download
+                Lista
+
           - if eva.inscriptions.count < 1
             %td
               = link_to evaluation_path(eva), method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' }, class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Eliminar #{@title.singularize}" do
@@ -52,7 +59,6 @@
     form_area.find('#evaluation_cost').val(cost);
     form_area.find('#evaluation_schedule_id').val(schedule_id);
     form_area.find('#evaluation_type').val(type);
-    form_area.find('#labelStart').hide();
 
     if (edit == true) {
       $('#titleEva').html('Editar Evaluación');
@@ -64,8 +70,6 @@
       $('#inputEdit').remove();
       form_area.find('#evaluation_start').prop('disabled', false);
       form_area.find('#evaluation_id').prop('disabled', true);
-      form_area.find('#evaluation_start').show();
-      form_area.find('#labelStart').show();
 
       //$('#inputEdit').val('');
       //$('#inputEdit').attr('name', '');

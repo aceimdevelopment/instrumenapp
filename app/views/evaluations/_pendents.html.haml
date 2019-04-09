@@ -10,11 +10,12 @@
   .tab-content
     #preinscriptions.tab-pane.active{role: :tabpanel}
       .panel-body
-        = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.preinscrito}
+        = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.preinscrito, type: :preinscritos}
         
     #confirmations.tab-pane{role: :tabpanel}
       .panel-body
-        = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.inscrito}
+        = render partial: '/inscriptions/index', locals: {inscriptions: @inscriptions.inscrito, type: :inscritos}
 
 - if current_user.is_admin?
   = render '/users/confirmation_modal'
+  = render '/users/update_inscription_modal'

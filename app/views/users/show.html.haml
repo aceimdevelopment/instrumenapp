@@ -2,4 +2,9 @@
 = render partial: '/users/profile'
 %br
 %h2 Evaluaciones: 
-= render partial: '/inscriptions/index', locals: {inscriptions: @user.inscriptions} if @user.is_student?
+= render partial: '/inscriptions/index', locals: {inscriptions: @user.inscriptions, type: :inscritos} if @user.is_student?
+
+- if current_user.is_admin?
+  - @actives = Evaluation.activa
+  = render '/users/confirmation_modal'
+  = render '/users/update_inscription_modal'

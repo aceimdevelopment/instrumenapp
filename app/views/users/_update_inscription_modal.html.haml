@@ -1,0 +1,16 @@
+#UpdateInscriptionModal.modal.fade{"aria-hidden": "true", tabindex: '-1'}
+  .modal-dialog
+    .modal-content
+      .alert.alert-info
+        %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+          %span{"aria-hidden": true} ×      
+        %h4.text-center
+          Actualizar Inscripción
+      .modal-body
+        = form_tag update_evaluation_inscriptions_path, id: 'update_evaluation_form' do
+          = hidden_field_tag :id, nil
+          .form-group
+            %label Evaluación:
+            = collection_select nil, :evaluation_id, @actives, :id, :description, {}, {class: 'form-control', required: true}
+          .form-group
+            %button.btn.btn-primary.block.full-width.m-b{:type => "submit"} Confirmar

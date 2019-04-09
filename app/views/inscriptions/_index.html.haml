@@ -9,7 +9,7 @@
         %th Descripción
         %th Lugar y Fecha
         %th Tipo
-        - if current_user.is_admin?
+        - if current_user.is_admin? and type and type.eql? :inscritos
           %th Transacción #
         %th Estado
         %th 
@@ -23,7 +23,7 @@
           %td= ins.description
           %td= ins.evaluation.description if (ins.inscrito? and ins.evaluation)
           %td= ins.tipo.titleize
-          - if current_user.is_admin?
+          - if current_user.is_admin? and type and type.eql? :inscritos
             %td= ins.baucher
           %td= label_state_record ins
           - if current_user.is_admin?
@@ -32,6 +32,11 @@
                 .tooltip-btn{'data-toggle': :tooltip, title: 'Confirmar Inscripción'}
                   = link_to '#confimationModal', class: 'badge badge-primary', "data-toggle": :modal, onclick: "$('#confimation_form #inscription_id').val('#{ins.id}');" do
                     %i.fa.fa-check
+            - if ins.inscrito?
+              %td
+                .tooltip-btn{'data-toggle': :tooltip, title: 'Cambiar Fecha Inscripción'}
+                  = link_to '#UpdateInscriptionModal', "data-toggle": :modal, onclick: "$('#update_evaluation_form #id').val('#{ins.id}');" do
+                    %i.fa.fa-pencil
             %td
               = link_to ins, method: :delete, class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
                 %i.fa.fa-trash
@@ -41,12 +46,12 @@
               = link_to make_inscription_download_path(ins.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Planilla Preinscripción', target: "_blank" do
                 %i.fa.fa-download
                 Planilla
+
           - if ins.aprobado?
             %td
               = link_to '#', class: 'btn btn-xs btn-primary' do
                 %i.fa.fa-download
                 Constancia de Aprobación
 
-- if false# current_user.is_admin?
-  = render '/users/confirmation_modal'
+
 
