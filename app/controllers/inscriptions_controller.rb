@@ -3,7 +3,8 @@ class InscriptionsController < ApplicationController
   layout 'visitors', only: [:new]
 
 
-  before_action :login_filter
+  before_action :login_filter, except: [:create]
+  before_action :admin_filter, except: [:create]
   
   # GET /inscriptions
   # GET /inscriptions.json

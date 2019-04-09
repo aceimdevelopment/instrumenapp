@@ -9,6 +9,7 @@
   %i.fa.fa-graduation-cap
   = @inscription.link_title
 
+
 .modal.fade{id: "new#{eva_title}", "aria-hidden": "true", tabindex: '-1'}
   .modal-dialog
     .modal-content
@@ -17,4 +18,26 @@
           %span{"aria-hidden": true} ×
         .text-center= "Inscripción en #{eva_title}"
       .modal-body
-        = render partial: '/inscriptions/form', locals: {languages: languages}
+        .div{id: "normative#{eva_title}"}
+
+          NORMATIVA...
+          %br
+          %br
+          %hr
+          %h5
+            = check_box_tag nil, nil, false, onchange: "if(this.checked){$('#next#{eva_title}').show()}else{$('#next#{eva_title}').hide()}"
+            Acepto las condiciones y normativa del programa
+          %hr
+
+          = link_to "javascript:void(0)", id: "next#{eva_title}", class: 'btn btn-primary btn-block m-b-1', style: 'display:none', onclick: "$('#step2#{eva_title}').show();$('#normative#{eva_title}').hide();"  do
+            Siguiente
+            %i.fa.fa-angle-right
+        .m-b-3{id: "step2#{eva_title}", style: "display:none"}
+          %h4.text-center ¿Está completamente seguro de preinscribir el programa y aceptar las condiciones y normativa?
+          = link_to "javascript:void(0)", class: 'btn btn-primary btn-sm pull-right m-l-1', onclick: "$('#step3#{eva_title}').show(); $('#step2#{eva_title}').hide();"  do
+            Aceptar
+          %a.btn.btn-sm.btn-default.pull-right{data: {dismiss: 'modal'}} Cancelar
+
+
+        .div{id: "step3#{eva_title}",style: 'display:none'}
+          = render partial: '/inscriptions/form', locals: {languages: languages}
