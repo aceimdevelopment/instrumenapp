@@ -52,15 +52,14 @@ class Pdf
 		pdf.move_down 5
 
 		preinscription_data inscription, pdf
-		pdf.move_down 6
 		bank_description inscription, pdf
 		factures_data inscription, pdf
 
 		if inscription.test?
 
-			pdf.text '<b>El día de la prueba deberá:</b>', size: 10, inline_format: true, align: :center
-			pdf.text 'Traer la planilla de inscripción sellada, su C.I. o algún documento emitido por una instancia válida (Colegio de Odontólogos, Médicos, etc.), un diccionario (en físico, NO SE PERMITIRÁN APARATOS ELECTRÓNICOS NI PRÉSTAMOS DE DICCIONARIOS DENTRO DEL AULA) y un lápiz o bolígrafo con que escribir.', size: 10, inline_format: true, align: :justify
-			pdf.text 'El miércoles siguiente, después de la prueba, usted podrá ingresar a la página para ver su resultado. Si éste es SUFICIENTE, debe imprimir la constancia y llevarla a las oficinas de FUNDEIM de lunes a miércoles de 3:00 a 5:30 p.m. para ser firmada y sellada.', size: 10, inline_format: true, align: :justify
+			pdf.text '<b>El día de la prueba deberá:</b>', size: 9, inline_format: true, align: :center
+			pdf.text 'Traer la planilla de inscripción sellada, su C.I. o algún documento emitido por una instancia válida (Colegio de Odontólogos, Médicos, etc.), un diccionario (en físico, NO SE PERMITIRÁN APARATOS ELECTRÓNICOS NI PRÉSTAMOS DE DICCIONARIOS DENTRO DEL AULA) y un lápiz o bolígrafo con que escribir.', size: 9, inline_format: true, align: :justify
+			pdf.text 'El miércoles siguiente, después de la prueba, usted podrá ingresar a la página para ver su resultado. Si éste es SUFICIENTE, debe imprimir la constancia y llevarla a las oficinas de FUNDEIM de lunes a miércoles de 3:00 a 5:30 p.m. para ser firmada y sellada.', size: 9, inline_format: true, align: :justify
 		else
 			pdf.move_down 10
 
@@ -138,9 +137,8 @@ class Pdf
 
 	def self.bank_description inscription, pdf
 		# -------- TABLA CUENTA ------- #
-		pdf.move_down 6
 
-		pdf.text "<b>Datos de Pago:</b>", size: 10, inline_format: true, align: :center
+		pdf.text "<b>Datos de Pago:</b>", size: 11, inline_format: true, align: :center
 
 		data = [["<i>Cuenta:</i>", "<b>Cuenta Corriente # 0102-0140-34000442688-4 del Banco de Venezuela</b>"]]
 		data << ["<i>A nombre de:</i>", "<b>FUNDEIM (RIF: J-30174529-9)</b>"]
