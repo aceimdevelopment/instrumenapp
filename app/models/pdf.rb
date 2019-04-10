@@ -12,7 +12,7 @@ class Pdf
 		encabezado_central_con_logo pdf, "Listado de Participantes"
 		pdf.move_down 10
 
-		pdf.text "<b>#{eva.tipo}:</b> #{eva.description} / <b>Fecha:</b> #{eva.start_to_local} / <b>Total:</b> #{eva.total_inscriptions}", align: :center, size: 12 
+		pdf.text "<b>#{eva.tipo}:</b> #{eva.description} / <b>Fecha:</b> #{eva.start_to_local} / <b>Total:</b> #{eva.total_inscriptions}", align: :center, size: 12, inline_format: true
 
 		pdf.move_down 10
 

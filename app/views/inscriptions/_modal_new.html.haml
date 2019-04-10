@@ -18,10 +18,26 @@
           %span{"aria-hidden": true} ×
         .text-center= "Inscripción en #{eva_title}"
       .modal-body
-        .div{id: "normative#{eva_title}"}
 
-          NORMATIVA...
+        .div{id: "procedure#{eva_title}"}
+          %div{style: 'max-height: 400px;overflow-y: scroll;text-align: justify;'}
+            - if @inscription.test?
+              = raw Test.procedure
+            - else 
+              = raw Course.procedure
           %br
+          %hr
+          = link_to "javascript:void(0)", class: 'btn btn-primary m-b-1', onclick: "$('#procedure#{eva_title}').hide();$('#normative#{eva_title}').show();"  do
+            Siguiente
+            %i.fa.fa-angle-right
+
+        .div{id: "normative#{eva_title}", style: 'display:none'}
+          %div{style: 'max-height: 450px;overflow-y: scroll;text-align: justify;'}
+
+            - if @inscription.test?
+              = raw Test.normative
+            - else 
+              = raw Course.normative
           %br
           %hr
           %h5
