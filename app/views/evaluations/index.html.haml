@@ -9,29 +9,29 @@
   .p-1.m-b-1
     %h3= "#{@title}:"
     %table.table.table-condensed.table-striped.table-hover
+      %thead
+        %tr
+          %th Fecha
+          - if true #params[:type].eql? 'course'
+            %th Título
+          %th Inscritos
+          %th Ubicación
+          %th Horario
+          %th Costo
+          %th Estado
+
       - @actives.each do |eva|
         %tr.success
+          %td= eva.start_to_local
+          - if true #params[:type].eql? 'course'
+            %td= eva.title
           %td
-            %b Fecha:
-            = eva.start_to_local
-          %td
-            %b Inscritos:
             - total = eva.inscriptions.count
-            = link_to_if total > 0, total, make_evaluation_list_download_path(eva.id)
-
-          %td
-            %b Ubicación:
-            = eva.location
-
-          %td
-            %b Horario:
-            = eva.schedule.description
-          %td
-            %b Costo:
-            = eva.cost
-          %td
-            %b Estado:
-            = eva.status.titleize
+            = link_to_if total > 0, total, make_evaluation_list_download_path(eva.id), target: "_blank"
+          %td= eva.location
+          %td= eva.schedule.description
+          %td= eva.cost
+          %td= eva.status.titleize
           %td            
             = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}',true);", class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Editar #{@title.singularize}"  do
               %i.fa.fa-pencil

@@ -8,7 +8,8 @@
           %th Participante
         %th Descripción
         %th Lugar y Fecha
-        %th Tipo
+        - unless controller_name.eql? 'evaluations'
+          %th Tipo
         - if current_user.is_admin? and type and type.eql? :inscritos
           %th Transacción #
         %th Estado
@@ -22,7 +23,8 @@
           /%td=# ins.area.description.titleize
           %td= ins.description
           %td= ins.evaluation.description if (ins.inscrito? and ins.evaluation)
-          %td= ins.tipo.titleize
+          - unless controller_name.eql? 'evaluations'
+            %td= ins.tipo.titleize
           - if current_user.is_admin? and type and type.eql? :inscritos
             %td= ins.baucher
           %td= label_state_record ins

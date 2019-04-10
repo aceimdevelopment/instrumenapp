@@ -47,17 +47,29 @@ class Pdf
 		pdf = Prawn::Document.new(top_margin: 20)
 
 		#titulo
-		encabezado_central_con_logo pdf, "Planilla de Inscripción (Sede Ciudad Universitaria)"
+		encabezado_central_con_logo_low pdf#, "Planilla de Inscripción (Sede Ciudad Universitaria)"
 
-		pdf.move_down 10
+		pdf.move_down 5
 
 		preinscription_data inscription, pdf
-		pdf.move_down 10
-		signatures pdf
+		pdf.move_down 6
+		bank_description inscription, pdf
 		factures_data inscription, pdf
+
+		if inscription.test?
+
+			pdf.text '<b>El día de la prueba deberá:</b>', size: 10, inline_format: true, align: :center
+			pdf.text 'Traer la planilla de inscripción sellada, su C.I. o algún documento emitido por una instancia válida (Colegio de Odontólogos, Médicos, etc.), un diccionario (en físico, NO SE PERMITIRÁN APARATOS ELECTRÓNICOS NI PRÉSTAMOS DE DICCIONARIOS DENTRO DEL AULA) y un lápiz o bolígrafo con que escribir.', size: 10, inline_format: true, align: :justify
+			pdf.text 'El miércoles siguiente, después de la prueba, usted podrá ingresar a la página para ver su resultado. Si éste es SUFICIENTE, debe imprimir la constancia y llevarla a las oficinas de FUNDEIM de lunes a miércoles de 3:00 a 5:30 p.m. para ser firmada y sellada.', size: 10, inline_format: true, align: :justify
+		else
+			pdf.move_down 10
+
+		end
 
 		pdf.move_down 10
 		pdf.text "<b>*** Acepté las condiciones y normativas del programa. ***</b>", size: 10, inline_format: true, align: :center
+		pdf.move_down 10
+		signatures pdf
 		pdf.move_down 10
 		pdf.text "----- COPIA DEL ESTUDIANTE -----", size: 10, align: :center
 
@@ -72,10 +84,10 @@ class Pdf
 		preinscription_data inscription, pdf
 		bank_description inscription, pdf
 		pdf.move_down 10
-		signatures pdf
-		pdf.move_down 10
-
 		pdf.text "<b>*** Acepté las condiciones y normativas del programa. ***</b>", size: 10, inline_format: true, align: :center
+		pdf.move_down 10
+		signatures pdf
+
 		pdf.move_down 10
 		pdf.text "----- COPIA ADMINISTRACIÓN -----", size: 10, align: :center
 
@@ -88,20 +100,16 @@ class Pdf
 	def self.preinscription_data inscription, pdf
 	# ------- DATOS DE LA PREINSCRIPCIO -------
 
-		pdf.text "<b>Datos de la Preinscripción:</b>", size: 11, inline_format: true, align: :center
+		pdf.text "<b>Datos Preinscripción #{inscription.tipo.titleize}: #{inscription.description}</b>", size: 11, inline_format: true, align: :center
 		data = [["<i>Participante:</i>", "<b>#{inscription.user.description if inscription.user}</b>"]]
-		data << ["<i>#{inscription.tipo}:</i>", "<b>#{inscription.description}</b>"]
 
 		if eva = inscription.evaluation
-			data << ["<i>Horario:</i>", "<b>#{eva.schedule.description}</b>"] if eva.schedule
-			data << ["<i>Ubicación:</i>", "<b>#{eva.location}</b>"] 
-			data << ["<i>Fecha:</i>", "<b>#{eva.start_to_local}</b>"] 
+			data << ["<i>#{inscription.tipo}:</i>", "<b>#{eva.start_to_local} (#{eva.schedule.description if eva.schedule })Ubicación:</b> #{eva.location} "]
 		else
 			location = GeneralParameter.ubicacion_prueba
 			schedule = Schedule.get_default_test_schedule 
 
-			data << ["<i>Horario:</i>", "<b>#{schedule.description}</b>"] if schedule
-			data << ["<i>Ubicación:</i>", "<b>#{location.value}</b>"] if location
+			data << ["<i>#{inscription.tipo}:</i>", "<b>______________________________ (#{schedule.description if schedule }) Ubicación:</b> #{location.value if location} "]
 		end
 
 		t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})
@@ -113,15 +121,11 @@ class Pdf
 
 	def self.factures_data inscription, pdf
 		# -------- TABLA CUENTA ------- #
-		pdf.move_down 10
 		pdf.text "<b>Datos de Facturación:</b>", size: 10, inline_format: true
 
-		data = [["<i>A nombre de:</i>", "__________________________________"]]
-		data << ["<i>CI ó RIF:</i>", "__________________________________"]
-		data << ["<i>Núm. Telefónico:</i>", "__________________________________"]
+		data = [["<i>A nombre de:</i>", "__________________________________________________________________________________________"]]
+		data << ["<i>CI ó RIF:</i>", "______________________________________ <i> Núm. Telefónico:</i> _____________________________________"]
 		data << ["<i>Dirección Fiscal:</i>", "__________________________________________________________________________________________"]
-		data << ["", "__________________________________________________________________________________________"]
-
 
 		t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})
 		t.draw
@@ -134,21 +138,20 @@ class Pdf
 
 	def self.bank_description inscription, pdf
 		# -------- TABLA CUENTA ------- #
-		pdf.move_down 10
+		pdf.move_down 6
 
-		pdf.text "<b>Datos de Pago:</b>", size: 11, inline_format: true, align: :center
+		pdf.text "<b>Datos de Pago:</b>", size: 10, inline_format: true, align: :center
 
 		data = [["<i>Cuenta:</i>", "<b>Cuenta Corriente # 0102-0140-34000442688-4 del Banco de Venezuela</b>"]]
 		data << ["<i>A nombre de:</i>", "<b>FUNDEIM (RIF: J-30174529-9)</b>"]
 		cost = inscription.evaluation ? inscription.evaluation.cost : GeneralParameter.costo_prueba.value
 
-		data << ["<i>Monto:</i>", "<b>#{cost}</b>"]
-		data << ["<i>Transacción:</i>", "<b>_________________________</b> <i>Tipo:</i> </b>T ____ D____ P ____</b>"]
+		data << ["<i>Monto:</i>", "<b>#{cost}</b> <i> Transacción: </i> ___________________________ T ____ D____ P ____ "]
 
 		t = pdf.make_table(data, width: 540, cell_style: { inline_format: true, size: 9, align: :left, padding: 3, border_color: 'FFFFFF'}, :column_widths => {0 => 80})
 		t.draw
 
-		pdf.move_down 10
+		pdf.move_down 6
 
 	end
 
@@ -163,6 +166,33 @@ class Pdf
 	end
 
 	# -------- FIN PLANILLA INSCRIPCIÓN DE ACEIM -------- #
+
+
+	def self.encabezado_central_con_logo_low pdf
+
+		logo_ucv = "app/assets/images/logo_ucv.png"
+		logo_fhe = "app/assets/images/logo_fhe.png"
+		logo_eim = "app/assets/images/logo_eim.jpg"
+
+
+		data = [[{image: logo_fhe, scale: 0.3, position: :center}, {image: logo_ucv, scale: 0.3, position: :center}, {image: logo_eim, scale: 0.3, position: :center}]]
+
+		t = pdf.make_table(data, width: 540, position: :center, cell_style: { inline_format: true, size: 9, align: :center, padding: 3, border_color: 'FFFFFF'})
+
+		t.draw
+
+		pdf.move_down 5
+		pdf.text "UNIVERSIDAD CENTRAL DE VENEZUELA", align: :center, size: 9
+		pdf.move_down 3
+		pdf.text "FACULTAD DE HUMANIDADES Y EDUCACIÓN", align: :center, size: 9
+		pdf.move_down 3
+	    pdf.text "ESCUELA DE IDIOMAS MODERNOS", align: :center, size: 9
+		pdf.move_down 3
+		pdf.text "Cursos de Postgrado EIM-UCV", align: :center, size: 9
+		pdf.move_down 3
+
+		# return pdf
+	end
 
 
 	def self.encabezado_central_con_logo pdf, titulo

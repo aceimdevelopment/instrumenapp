@@ -34,15 +34,6 @@ class Test < Evaluation
 		return Date.today+next_test.days
 	end
 
-	def self.instruction_testday
-
-		"
-		<p>El día de la prueba deberá:</p>
-		<p>Traer la planilla de inscripción sellada, su C.I. o algún documento emitido por una instancia válida (Colegio de Odontólogos, Médicos, etc.), un diccionario (en físico, NO SE PERMITIRÁN APARATOS ELECTRÓNICOS NI PRÉSTAMOS DE DICCIONARIOS DENTRO DEL AULA) y un lápiz o bolígrafo con que escribir.</p>
-		<p>El miércoles siguiente, después de la prueba, usted podrá ingresar a la página para ver su resultado. Si éste es SUFICIENTE, debe imprimir la constancia y llevarla a las oficinas de FUNDEIM de lunes a miércoles de 3:00 a 5:30 p.m. para ser firmada y sellada.</p>
-		"		
-	end
-
 	def self.normative
 
 		"
