@@ -8,7 +8,7 @@ class EvaluationsController < ApplicationController
   # GET /evaluations.json
 
   def index
-    Evaluation.archive_old_eva
+    # Evaluation.archive_old_eva
     @evaluation = Evaluation.new
     @evaluation.type = 'Course'
 
