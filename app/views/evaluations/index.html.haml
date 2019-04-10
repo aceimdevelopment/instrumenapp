@@ -12,7 +12,7 @@
       %thead
         %tr
           %th Fecha
-          - if true #params[:type].eql? 'course'
+          - if params[:type].eql? 'course'
             %th Título
           %th Inscritos
           %th Ubicación
@@ -23,7 +23,7 @@
       - @actives.each do |eva|
         %tr.success
           %td= eva.start_to_local
-          - if true #params[:type].eql? 'course'
+          - if params[:type].eql? 'course'
             %td= eva.title
           %td
             - total = eva.inscriptions.count
