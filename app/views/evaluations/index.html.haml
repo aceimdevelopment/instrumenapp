@@ -33,7 +33,7 @@
           %td= eva.cost
           %td= eva.status.titleize
           %td            
-            = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}',true);", class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Editar #{@title.singularize}"  do
+            = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(eva)}', '#{eva.type}', '#{eva.id}', '#{eva.location}', '#{eva.schedule_id}', '#{eva.cost}', '#{eva.title}', '#{eva.start.to_s}',true);", class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Editar #{@title.singularize}"  do
               %i.fa.fa-pencil
           - if total > 0
             %td
@@ -52,24 +52,28 @@
 
 :javascript
 
-  function change_eva(url, type, id = '', location = '', schedule_id = '', cost = '', edit = false){
+  function change_eva(url, type, id = '', location = '', schedule_id = '', cost = '', title= '', start='', edit = false){
     var form_area = $('#new_evaluation');
     form_area.attr("action", url);
     form_area.find('#evaluation_location').val(location);
     form_area.find('#evaluation_cost').val(cost);
     form_area.find('#evaluation_schedule_id').val(schedule_id);
     form_area.find('#evaluation_type').val(type);
+    form_area.find('#evaluation_title').val(title);
+    form_area.find('#evaluation_start').val(start);
 
     if (edit == true) {
       $('#titleEva').html('Editar Evaluación');
       form_area.append("<input type='hidden' name='_method' value='patch' id='inputEdit'>");
       form_area.append("<input type='hidden' name='id' value=id id='evaluation_id'>");
+      $('#areas').hide();
 
     }else{
       $('#titleEva').html('Nueva Evaluación');
       $('#inputEdit').remove();
       form_area.find('#evaluation_start').prop('disabled', false);
       form_area.find('#evaluation_id').prop('disabled', true);
+      $('#areas').show();
 
       //$('#inputEdit').val('');
       //$('#inputEdit').attr('name', '');

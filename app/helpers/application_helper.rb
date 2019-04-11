@@ -10,7 +10,9 @@ module ApplicationHelper
     def label_state_record inscription
 
         content_tag :span, class: "label label-#{inscription.alert_type}" do
-            capture_haml{inscription.status.titleize}
+            description = inscription.status.titleize
+            description += " (Asignado)" if inscription.preinscrito? and inscription.evaluation and inscription.evaluation.title 
+            capture_haml{description}
         end
         
     end

@@ -31,9 +31,9 @@ class Inscription < ApplicationRecord
 
   def description
     aux = ""
-    aux += "#{language.description.titleize}" if language.description
-    aux += " - #{area.description.titleize}" if area.description
-    aux = ": #{evaluation.title}" if evaluation and evaluation.title
+    aux += "#{language.description.titleize}" #if language.description
+    aux += " - #{area.description.titleize}" #if area.description
+    aux += " (#{evaluation.title})" if evaluation and evaluation.title
     return aux
   end
 

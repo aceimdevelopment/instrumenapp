@@ -1,5 +1,5 @@
 class InscriptionsController < ApplicationController
-  before_action :set_inscription, only: [:show, :edit, :update, :destroy, :update_evaluation]
+  before_action :set_inscription, only: [:show, :edit, :update, :destroy, :update_evaluation, :release]
   layout 'visitors', only: [:new]
 
 
@@ -46,6 +46,30 @@ class InscriptionsController < ApplicationController
   def edit
   end
 
+  def release
+    @inscription.evaluation_id = nil
+    if @inscription.save
+      flash[:success] = '¡Inscripción desasignada!'
+    else
+      flash[:danger] = "Error: #{@inscription.errors.full_messages.to_sentence}"
+    end
+    redirect_back fallback_location: "#{evaluations_path}?type=course"
+  end
+
+
+  def set
+    @inscription = Inscription.find params[:inscription_id]
+    @inscription.evaluation_id = params[:evaluation_id]
+    if @inscription.save
+      flash[:success] = "¡#{@inscription.user.name.titleize} asignado a #{@inscription.description}!"
+    else
+      flash[:error] = "Error: #{@inscription.erros.full_messages.to_sentence}"
+    end
+
+
+    redirect_back fallback_location: user_path(@inscription.user)
+  end
+
   def confirmation
     @inscription = Inscription.find params[:inscription_id]
     @inscription.baucher = params[:baucher]
@@ -54,7 +78,7 @@ class InscriptionsController < ApplicationController
     if @inscription.save
       flash[:success] = '¡Inscripción confirmada!'
     else
-      flash[:error] = "Error: #{@inscription.erros.full_messages.to_sencentes}"
+      flash[:error] = "Error: #{@inscription.erros.full_messages.to_sentence}"
     end
 
 

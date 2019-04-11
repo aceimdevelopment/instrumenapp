@@ -32,8 +32,13 @@ class Evaluation < ApplicationRecord
 
   def description
     # "#{hour} - #{location} - #{schedule.description if schedule}"
-    "#{self.start_to_local} - #{location} - #{schedule.description if schedule}: #{title}"
+    aux = "#{start_and_location}"
+    aux +=  " (#{title})" if title
+    return aux
+  end
 
+  def start_and_location
+    "#{start_to_local} #{schedule.description if schedule}. #{location}"    
   end
 
   # PUBLIC FUNCTIONS

@@ -75,6 +75,13 @@ class EvaluationsController < ApplicationController
       flash[:success] = 'Evaluación creada con éxito.'
       if @evaluation.is_a? Course and params[:areas]
         params[:areas].each do |a|
+
+          area = Area.find a
+          area.inscriptions.preinscrito.each do |pr|
+            pr.evaluation_id = @evaluation.id
+            pr.save
+          end
+
           @evaluation.area_courses.create(area_id: a)
         end
       end

@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   resources :inscriptions do
     collection do
       post 'confirmation'
+      post 'set'
       post 'update_evaluation'
+    end
+    member do
+      get 'release'
     end
   end 
   resources :languages

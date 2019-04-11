@@ -99,11 +99,11 @@ class Pdf
 	def self.preinscription_data inscription, pdf
 	# ------- DATOS DE LA PREINSCRIPCIO -------
 
-		pdf.text "<b>Datos Preinscripción #{inscription.tipo.titleize}: #{inscription.description}</b>", size: 11, inline_format: true, align: :center
+		pdf.text "<b>Datos de Preinscripción en #{inscription.tipo.titleize} de #{inscription.description}</b>", size: 11, inline_format: true, align: :center
 		data = [["<i>Participante:</i>", "<b>#{inscription.user.description if inscription.user}</b>"]]
 
 		if eva = inscription.evaluation
-			data << ["<i>#{inscription.tipo}:</i>", "<b>#{eva.start_to_local} (#{eva.schedule.description if eva.schedule })Ubicación:</b> #{eva.location} "]
+			data << ["<i>#{inscription.tipo}:</i>", "<b>#{eva.start_to_local} (#{eva.schedule.description if eva.schedule }) Ubicación: #{eva.location} </b>"]
 		else
 			location = GeneralParameter.ubicacion_prueba
 			schedule = Schedule.get_default_test_schedule 
