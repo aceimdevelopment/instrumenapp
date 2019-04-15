@@ -1,5 +1,5 @@
 class EvaluationsController < ApplicationController
-  before_action :set_evaluation, only: [:show, :edit, :update, :destroy, :confirm]
+  before_action :set_evaluation, only: [:show, :edit, :update, :destroy, :confirm, :qualify]
 
   before_action :login_filter
   before_action :admin_filter
@@ -89,8 +89,19 @@ class EvaluationsController < ApplicationController
       flash[:danger] = "Error: #{@evaluation.errors.full_messages.to_sentence}"
     end
 
-    redirect_back fallback_location: evaluations_path
+    redirect_back fallback_location: "#{evaluations_path}?#{@evaluation.type}=true"
 
+  end
+
+  def qualify
+    params[:inscriptions].each_pair do |k,v|
+      ins = Inscription.find k
+      ins.status = v
+      ins.save
+    end
+    @evaluation.status = :archivada if params[:archive]
+    @evaluation.save
+    redirect_to "#{evaluations_path}?type=#{@evaluation.type.downcase}"
   end
 
   # PATCH/PUT /evaluations/1

@@ -1,63 +1,56 @@
-= link_to 'Regresar', evaluations_path, class: 'btn btn-sm btn-default m-t-2'
+=# link_to 'Regresar', evaluations_path, class: 'btn btn-sm btn-default m-t-2'
 
-%h2 Caracteristicas del curso:
+%h2 Caracteristicas:
 
-%table.table.table-hover.table-striped.table-border
+%table.table.table-condensed.table-striped.table-hover
   %thead
     %tr
-      %th Inicio
-      %th= (@evaluation.is_a? Test) ? 'Duración' : 'Final'
+      %th Fecha
+      - if @evaluation.is_a? Course
+        %th Título
+      %th Inscritos
       %th Ubicación
-      %th Tipo
-      %th Idioma
-      %th Área
+      %th Horario
       %th Costo
-      %th
-        %b.tooltip-btn{ 'data_toggle': :tooltip, title: 'Preinscritos Vs Inscritos'} Pre/Ins
+      %th Estado
 
   %tbody
-    %tr
-      %td= (@evaluation.is_a? Test) ? @evaluation.start.strftime('%d / %m / %Y, %I:%M%p') : @evaluation.date_start
-      %td= (@evaluation.is_a? Test) ? @evaluation.duration : @evaluation.date_end
-      %td= @evaluation.location
-      %td= @evaluation.type
-      %td= @evaluation.language.description.titleize
-      %td= @evaluation.area.description if @evaluation.area
-      %td= @evaluation.cost_to_bs
-      %td= "#{@evaluation.records.preinscrito.count}/#{@evaluation.records.inscrito.count}"
+    = render partial: 'detail', locals: {evaluation: @evaluation}
 
-      %td
-        = link_to make_evaluation_list_download_path(@evaluation.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Lista de Secciones', target: "_blank" do
-          %i.fa.fa-download
-          Lista
-
-
-      - if @evaluation.abierto?
-        %td
-          = link_to confirm_evaluation_path(@evaluation), class: 'btn btn-xs btn-primary tooltip-btn', data_toggle: :tooltip, title: 'Confirmar' do
-            %i.fa.fa-check
-
-      %td
-        - total = @evaluation.records.count
-        - unless total > 0
-          = link_to evaluation_path(@evaluation), method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
-            %i.fa.fa-trash.text-danger
-
-- if @evaluation.records.count > 0
+- if @evaluation.inscriptions.any?
   %h2 Participantes:
-  %table.table.table-hover.table-striped.table-border
-    %thead
-      %tr
-        %th CI
-        %th Apellidos y Nombres
-        %th Estado
-        %th
-    %tbody
-      - @evaluation.records.each do |r| 
-        %tr
-          %td= link_to r.student.id, user_path(r.student)
-          %td= r.student.inverse_name
-          %td= label_state_record r
-          %td
-            = link_to "#{users_destroy_record_path}?id=#{r.id}", class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
-              %i.fa.fa-trash
+  - @inscriptions = @evaluation.inscriptions
+  = form_tag qualify_evaluation_path, id: 'qualify_form' do
+    = render file: '/inscriptions/index'
+
+:javascript
+
+  function change_eva(url, type, id = '', location = '', schedule_id = '', cost = '', title= '', start='', edit = false){
+    var form_area = $('#new_evaluation');
+    form_area.attr("action", url);
+    form_area.find('#evaluation_location').val(location);
+    form_area.find('#evaluation_cost').val(cost);
+    form_area.find('#evaluation_schedule_id').val(schedule_id);
+    form_area.find('#evaluation_type').val(type);
+    form_area.find('#evaluation_title').val(title);
+    form_area.find('#evaluation_start').val(start);
+
+    if (edit == true) {
+      $('#titleEva').html('Editar Evaluación');
+      form_area.append("<input type='hidden' name='_method' value='patch' id='inputEdit'>");
+      form_area.append("<input type='hidden' name='id' value=id id='evaluation_id'>");
+      $('#areas').hide();
+
+    }else{
+      $('#titleEva').html('Nueva Evaluación');
+      $('#inputEdit').remove();
+      form_area.find('#evaluation_start').prop('disabled', false);
+      form_area.find('#evaluation_id').prop('disabled', true);
+      $('#areas').show();
+
+      //$('#inputEdit').val('');
+      //$('#inputEdit').attr('name', '');
+    }
+    $('#evaModal').modal();
+
+  }

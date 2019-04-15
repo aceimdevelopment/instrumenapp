@@ -9,36 +9,32 @@
       %br
       ACEIM
       %br
+      %br
 
 %nav.navbar.navbar-dark.bg-warning{style: 'background-color: #ffc107 !important;'}
 
-.border.m-1
-  .m-1.p-1
-    .animated.fadeInRight
-      .row
-        .col-lg-12
-          .text-center.m-t-lg
-            %h1= @mainTitle
-            
-            = @mainDesc
-  .p-1
-    %h2.text-center.p-2 PARA OBTENER INFORMACIÓN DETALLADA, POR FAVOR, SELECCIONE LA OPCIÓN DE SU PREFERENCIA
-    = render '/evaluations/evaluations_links'
+.animated.fadeInRight
+  .row
+    .col-lg-12
+      .text-center
+        %h1= @mainTitle
+        
+        %h3= @mainDesc
 
-    %hr
-    .text-center
-      = link_to "#newUserSession", class: 'btn btn-primary btn-block', "data-toggle": :modal do
-        %i.fa.fa-paper-plane
-        Usuario Registrado
+.p-l-2.p-r-2.p-b-2
+  %h2.text-center PARA OBTENER INFORMACIÓN DETALLADA, POR FAVOR, SELECCIONE LA OPCIÓN DE SU PREFERENCIA
+  = render '/evaluations/evaluations_links'
 
-.middle-box.p-b-4= render '/home/login'
+  .text-center.m-t-2
+    = link_to "#newUserSession", class: 'btn btn-primary', "data-toggle": :modal do
+      %i.fa.fa-paper-plane
+      Usuario Registrado
 
-#pie
+= render '/home/login'
+
+#pie.m-b-3
   CIUDAD UNIVERSITARIA DE CARACAS - PATRIMONIO CULTURAL DE LA HUMANIDAD
-  <br>
+  %br
   Ciudad Universitaria de Caracas, Galpón 7, Frente a Farmacia. Telf.: (0212) 6052982
-  <br>
+  %br
   Cursos de Extensión EIM-UCV - 2011
-
-%br
-%br

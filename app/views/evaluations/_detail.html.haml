@@ -1,0 +1,30 @@
+%tr.success
+  %td= evaluation.start_to_local
+  - if params[:type].eql? 'course' or evaluation.is_a? Course
+    %td= evaluation.title
+  %td
+    - total = evaluation.inscriptions.count
+    = link_to_if total > 0, total, make_evaluation_list_download_path(evaluation.id), target: "_blank"
+  %td= evaluation.location
+  %td= evaluation.schedule.description
+  %td= evaluation.cost
+  %td= evaluation.status.titleize
+  
+  - unless action_name.eql?('show')
+    %td
+      -if total > 0
+        = link_to evaluation_path(evaluation), class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Calificar" do
+          %i.fa.fa-smile-o
+    %td
+      = link_to 'javascript:void(0)', onclick: "change_eva('#{evaluation_path(evaluation)}', '#{evaluation.type}', '#{evaluation.id}', '#{evaluation.location}', '#{evaluation.schedule_id}', '#{evaluation.cost}', '#{evaluation.title}', '#{evaluation.start.to_s}',true);", class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Editar"  do
+        %i.fa.fa-pencil
+  - if total > 0
+    %td
+      = link_to make_evaluation_list_download_path(evaluation.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Lista de Secciones', target: "_blank" do
+        %i.fa.fa-download
+        Lista
+
+  - if evaluation.inscriptions.count < 1
+    %td
+      = link_to evaluation_path(evaluation), method: :delete, data: { confirm: 'Ésta acción es irreversible ¿está seguro?' }, class: 'tooltip-btn', 'data_toggle': :tooltip, title: "Eliminar" do
+        %i.fa.fa-trash.text-danger

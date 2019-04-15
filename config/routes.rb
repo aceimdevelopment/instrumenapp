@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :evaluations do
     member do
       get 'confirm'
+      post 'qualify'
     end
   end
   get '/users/evaluation'

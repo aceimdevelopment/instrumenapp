@@ -1,21 +1,48 @@
-%table.table.table-hover.table-striped.table-border
-  %thead
-    %tr
-      %th Idioma
-      %th Area
-      %th Participante
-      %th Estado
-      %th
-
-
-  %tbody
-    - @inscriptions.each do |inscription|
+.p-2.border
+  %table.table.table-hover.table-striped.table-bordered
+    %thead
       %tr
-        %td= inscription.lenguage
-        %td= inscription.area
-        %td= inscription.studient
-        %td
-          = link_to inscription, method: :delete, class: 'text-danger', data: { confirm: 'Ésta acción es irreversible ¿está seguro?' } do
-            %i.fa.fa-trash
+        %th Estudiante
+        %th Idioma
+        %th Area
+        %th Estado
+        %th.text-center Aprobado
+        %th.text-center Aplazado
 
-=# link_to 'Inscribir', new_preinscription_path
+    %tbody
+      - @inscriptions.each do |inscription|
+        %tr
+          %td= link_to inscription.user.description, user_path(inscription.user_id)
+          %td= inscription.language.description.titleize
+          %td= inscription.area.description.titleize
+          %td
+            =label_state_record inscription
+          - if inscription.evaluation and !inscription.preinscrito? 
+            %td.text-center
+              =# check_box_tag "inscriptions[#{inscription.id}]", inscription.aprobado?
+              = radio_button_tag "inscriptions[#{inscription.id}]", 'aprobado', (inscription.aprobado?), required: true, class: ''
+            %td.text-center
+              = radio_button_tag "inscriptions[#{inscription.id}]", 'aplazado', (inscription.aplazado?), required: true, class: ''
+  .m-b-4
+    .form-group.pull-right
+      = submit_tag 'Guardar', class: 'btn btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Guardar Calificaciones'
+      =# link_to 'Guardar', 'javascript:void(0)', class: 'btn btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Guardar Calificaciones', onclick: "$('#confirmModal').modal()"
+    .form-group
+      %label.pull-right.m-r-2
+        ¿Archivar Evaluación?
+        = check_box_tag 'archive', true
+- if false
+  #confirmModal.modal.fade{"aria-hidden": "true", tabindex: '-1'}
+    .modal-dialog
+      .modal-content
+        .alert.alert-info
+          %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
+            %span{"aria-hidden": true} ×      
+          %h4#titleEva.text-center
+            Confirmar Calificación
+        .modal-body
+          %h3.text-center ¿Está Seguro que desea guardar los cambios?
+          %br
+          = link_to 'Guardar', 'javascript:void(0)', class: 'pull-right btn btn-primary', onclick: "$('#qualify_form').validate();"
+          %a.btn.btn-default{data: {dismiss: 'modal'}} Cancelar
+
