@@ -89,15 +89,15 @@
 
     var languages = $("#inscription_language_id")
     if (type == 'Test'){
-      languages.children('option').hide();
-      languages.children('option[value="ING"]').show();
-      languages.children('option[value="ING"]').prop('selected', true);
+      languages.children('option').show();
+      languages.children('option[value="ING"]').prop('selected', false);
       $('#inscription_evatype').val('test');
 
     }else{
-      languages.children('option').show();
+      languages.children('option').hide();
+      languages.children('option[value="ING"]').show();
+      languages.children('option[value="ING"]').prop('selected', true);
       $('#inscription_evatype').val('course');
-      languages.children('option[value="ING"]').prop('selected', false);
     }
 
     $('#inscriptionModal').modal();
