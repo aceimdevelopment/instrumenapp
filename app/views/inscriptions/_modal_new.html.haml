@@ -1,59 +1,119 @@
-- if @inscription.test?
-  - eva_title = 'Prueba'
-  - languages = Language.all.order(description: :asc)
-- else
-  - eva_title = 'Curso'
-  - languages = Language.where(id: 'ING')
 
-= link_to "#new#{eva_title}", class: 'btn btn-success btn-block m-b-1', "data-toggle": :modal do
-  %i.fa.fa-graduation-cap
-  = @inscription.link_title
+.text-center
+  .border
+    %h2 Prueba de Dominio Instrumental de Idiomas Extranjeros para Postgrado
+    = link_to "javascript:void(0)", class: 'btn btn-success m-b-1 m-r-3', onclick: "step1('Test', true);" do
+      %i.fa.fa-graduation-cap
+      Información sobre la prueba
+    
+    = link_to "javascript:void(0)", class: 'btn btn-success m-b-1', onclick: "step1('Test');" do
+      %i.fa.fa-graduation-cap
+      Inscribir Prueba
+  %br
+  .border
+    %h2 Realizar Curso Instrumental Inglés
+    = link_to "javascript:void(0)", class: 'btn btn-success m-b-1 m-r-3', onclick: "step1('Course', true);" do
+      %i.fa.fa-graduation-cap
+      Información del Curso
+    
+    = link_to "javascript:void(0)", class: 'btn btn-success m-b-1', onclick: "step1('Course');" do
+      %i.fa.fa-graduation-cap
+      Inscribir Curso
 
-
-.modal.fade{id: "new#{eva_title}", "aria-hidden": "true", tabindex: '-1'}
+#inscriptionModal.modal.fade{"aria-hidden": true, tabindex: '-1'}
   .modal-dialog
     .modal-content
       .alert.alert-info
         %button.close{"aria-label": "Cerrar", "data-dismiss": :modal, type: :button}
           %span{"aria-hidden": true} ×
-        .text-center= "Inscripción en #{eva_title}"
+        .text-center Inscripción Cursos y Pruebas Instrumentales
       .modal-body
-
-        .div{id: "procedure#{eva_title}"}
-          %div{style: 'max-height: 400px;overflow-y: scroll;text-align: justify;'}
-            - if @inscription.test?
-              = raw Test.procedure
-            - else 
-              = raw Course.procedure
+        .panels#procedure
+          .contents#procedureTest= raw Test.procedure
+          .contents#procedureCourse= raw Course.procedure            
           %br
           %hr
-          = link_to "javascript:void(0)", class: 'btn btn-primary m-b-1', onclick: "$('#procedure#{eva_title}').hide();$('#normative#{eva_title}').show();"  do
+          = link_to "javascript:void(0)", class: 'btn btn-primary pull-right', onclick: 'step2();' do
             Siguiente
             %i.fa.fa-angle-right
-
-        .div{id: "normative#{eva_title}", style: 'display:none'}
-          %div{style: 'max-height: 450px;overflow-y: scroll;text-align: justify;'}
-
-            - if @inscription.test?
-              = raw Test.normative
-            - else 
-              = raw Course.normative
+          %br
+        .panels#normative
+          .contents#normativeTest= raw Test.normative
+          .contents#normativeCourse= raw Course.normative            
           %br
           %hr
-          %h5
-            = check_box_tag nil, nil, false, onchange: "if(this.checked){$('#next#{eva_title}').show()}else{$('#next#{eva_title}').hide()}"
-            Acepto las condiciones y normativa del programa
-          %hr
+          #termsCheck
+            %h5
+              = check_box_tag 'check_terms', nil, false, onchange: "if(this.checked){$('#accept_terms').show()}else{$('#accept_terms').hide()}"
+              Acepto las condiciones y normativa del programa
+            = link_to "javascript:void(0)", id: 'accept_terms',class: 'btn btn-primary pull-right m-l-2', onclick: "step3();", style: 'display:none' do
+              Siguiente
+              %i.fa.fa-angle-right
+            %br
 
-          = link_to "javascript:void(0)", id: "next#{eva_title}", class: 'btn btn-primary btn-block m-b-1', style: 'display:none', onclick: "$('#step2#{eva_title}').show();$('#normative#{eva_title}').hide();"  do
-            Siguiente
-            %i.fa.fa-angle-right
-        .m-b-3{id: "step2#{eva_title}", style: "display:none"}
+
+          #termsOptions
+            %a.btn.btn-default{data: {dismiss: 'modal'}} Salir
+            = link_to "javascript:void(0)", class: 'btn btn-primary pull-right m-l-2', onclick: "step3();" do
+              Inscribir
+
+        .panels.m-b-3#confirmation
           %h4.text-center ¿Está completamente seguro de preinscribir el programa y aceptar las condiciones y normativa?
-          = link_to "javascript:void(0)", class: 'btn btn-primary btn-sm pull-right m-l-1', onclick: "$('#step3#{eva_title}').show(); $('#step2#{eva_title}').hide();"  do
+          = link_to "javascript:void(0)", class: 'btn btn-primary pull-right m-l-2', onclick: "step4();"  do
             Aceptar
-          %a.btn.btn-sm.btn-default.pull-right{data: {dismiss: 'modal'}} Cancelar
+          %a.btn.btn-default.pull-right{data: {dismiss: 'modal'}} Cancelar
+        .panels#inscription
+          = render partial: '/inscriptions/form'
 
 
-        .div{id: "step3#{eva_title}",style: 'display:none'}
-          = render partial: '/inscriptions/form', locals: {languages: languages}
+:javascript
+
+  function step1(type, info=false){
+
+    $('.contents').hide();
+    $('#normative'+type).show();
+    $('#check_terms').prop('checked', false);
+    $('#accept_terms').hide();
+    $('.panels').hide();
+    $('#procedure').show();
+    $('#procedure'+type).show();
+    if (info) {
+
+      $('#termsCheck').hide();
+      $('#termsOptions').show();
+
+    }else{
+      $('#termsCheck').show();
+      $('#termsOptions').hide();
+    }
+
+    var languages = $("#inscription_language_id")
+    if (type == 'Test'){
+      languages.children('option').hide();
+      languages.children('option[value="ING"]').show();
+      languages.children('option[value="ING"]').prop('selected', true);
+      $('#inscription_evatype').val('test');
+
+    }else{
+      languages.children('option').show();
+      $('#inscription_evatype').val('course');
+      languages.children('option[value="ING"]').prop('selected', false);
+    }
+
+    $('#inscriptionModal').modal();
+  }
+
+  function step2(){
+    $('.panels').hide();
+    $('#normative').show();
+  }
+
+  function step3(){
+    $('.panels').hide();
+    $('#confirmation').show();
+  }
+
+  function step4(){
+    $('.panels').hide();
+    $('#inscription').show();
+  }  

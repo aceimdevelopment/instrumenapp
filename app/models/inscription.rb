@@ -20,7 +20,7 @@ class Inscription < ApplicationRecord
 
   def link_title
     if self.test?
-      "Inscribir Prueba de Dominio Instrumental de Idiomas Extranjeros para Postgrados"
+      "Prueba de Dominio Instrumental de Idiomas Extranjeros para Postgrado"
     elsif self.course?
       "Realizar Curso Instrumental Inglés"
     else

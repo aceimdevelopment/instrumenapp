@@ -1,13 +1,27 @@
+#banner
+  #banner_barra
+    #banner_contenido
+      Universidad Central de Venezuela
+      %br
+      Facultad de Humanidades y Educación
+      %br
+      Escuela de Idiomas Modernos
+      %br
+      ACEIM
+      %br
+
+%nav.navbar.navbar-dark.bg-warning{style: 'background-color: #ffc107 !important;'}
+
 .border.m-1
-  .border.m-1.p-1
+  .m-1.p-1
     .animated.fadeInRight
       .row
         .col-lg-12
           .text-center.m-t-lg
             %h1= @mainTitle
-            %small
-              = @mainDesc
-  .p-3
+            
+            = @mainDesc
+  .p-1
     %h2.text-center.p-2 PARA OBTENER INFORMACIÓN DETALLADA, POR FAVOR, SELECCIONE LA OPCIÓN DE SU PREFERENCIA
     = render '/evaluations/evaluations_links'
 
@@ -19,7 +33,12 @@
 
 .middle-box.p-b-4= render '/home/login'
 
-%br
-%br
-%br
+#pie
+  CIUDAD UNIVERSITARIA DE CARACAS - PATRIMONIO CULTURAL DE LA HUMANIDAD
+  <br>
+  Ciudad Universitaria de Caracas, Galpón 7, Frente a Farmacia. Telf.: (0212) 6052982
+  <br>
+  Cursos de Extensión EIM-UCV - 2011
 
+%br
+%br

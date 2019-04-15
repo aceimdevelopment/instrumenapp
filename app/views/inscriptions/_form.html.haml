@@ -3,7 +3,7 @@
   %br
   .form-group
     = f.label :lenguage, value: 'Idioma:'
-    = f.collection_select :language_id, languages, :id, :description, {prompt: "Idioma..."}, { class: 'form-control', required: true, autofocus: true}
+    = f.collection_select :language_id, Language.all.order(description: :asc), :id, :description, {prompt: "Idioma..."}, { class: 'form-control', required: true, autofocus: true}
   .form-group
     = f.label :area, value: 'Área:'
     = f.collection_select :area_id, Area.all.order(description: :asc), :id, :description, {prompt: "Área..."}, { class: 'form-control', required: true}
@@ -16,8 +16,8 @@
   %br
   = render '/users/form_fields'
   .actions
-    %a.btn.btn-sm.btn-default.pull-left{data: {dismiss: 'modal'}} Cancelar
-    = f.submit 'Guardar', class: 'btn btn-primary btn-sm pull-right'
+    %a.btn.btn-default.pull-left{data: {dismiss: 'modal'}} Cancelar
+    = f.submit 'Guardar', class: 'btn btn-primary pull-right'
   %br
 
 

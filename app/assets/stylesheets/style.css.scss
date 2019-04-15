@@ -63,6 +63,45 @@
   }
 }
 
+
+
+
+#banner{
+	margin:0;
+	height:105px;
+	background: url(encabezado_bg.gif) repeat-x center top;
+	padding-right: 30px;
+	padding-left: 30px;
+}
+
+#banner_barra{
+  background: url(barra_amarilla_ucv.png) no-repeat left;
+  background-position: 10px 20px;
+  letter-spacing: 3px;
+}
+
+#banner_contenido{
+	padding-top: 29px;
+	padding-left: 30px; 
+	background:url(aceim.png) no-repeat right; 
+	font-size: 13px; 
+	text-align: left; 
+	color: white; 
+	font-weight: lighter;
+}
+
+#pie {	
+	padding: 10px 0 10px 0;
+	background: url(encabezado_bg.gif) repeat-x center bottom;
+	color: white;
+	font-size: 10px;
+	letter-spacing: 3px;
+    text-align: center;
+}
+
+
+.contents{max-height: 400px;overflow-y: scroll;text-align: justify;}
+
 .border{border: 1px solid darkgrey;}
 
 .p-4{padding: 40px;}
