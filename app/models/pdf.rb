@@ -20,7 +20,7 @@ class Pdf
 		# pdf.text "Profesor: #{seccion.descripcion_profesor_asignado}", size: 10
 	 
 		pdf.move_down 10
-		data = [["<b>#</b>", "<b>Nombres</b>", "<b>Cédula</b>", "<b>Idioma</b>", "<b>Área</b>", "<b>Correo</b>", "<b>Estado</b>"]]
+		data = [["<b>#</b>", "<b>Nombres</b>", "<b>Cédula</b>", "<b>Idioma</b>", "<b>Área</b>", "<b>Correo</b>", "<b>Teléfono</b>", "<b>Estado</b>"]]
 
 		inscriptions = eva.inscriptions.sort_by{|h| h.user.last_name}
 
@@ -33,11 +33,12 @@ class Pdf
 			lan,
 			area,
 			e.user.email,
+			e.user.phone,
 			e.status.titleize
 			]	
 		end
 		
-		t = pdf.make_table(data, header: true, row_colors: ["F0F0F0", "FFFFFF"], width: 540, position: :center, cell_style: { inline_format: true, size: 9, align: :justify, padding: 3, border_color: '818284'}, :column_widths => {1 => 250})
+		t = pdf.make_table(data, header: true, row_colors: ["F0F0F0", "FFFFFF"], width: 540, position: :center, cell_style: { inline_format: true, size: 9, align: :justify, padding: 3, border_color: '818284'}, :column_widths => {1 => 180})
 		t.draw
 
 		return pdf
