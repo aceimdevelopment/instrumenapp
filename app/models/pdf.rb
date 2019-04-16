@@ -20,14 +20,18 @@ class Pdf
 		# pdf.text "Profesor: #{seccion.descripcion_profesor_asignado}", size: 10
 	 
 		pdf.move_down 10
-		data = [["<b>#</b>", "<b>Nombres</b>", "<b>Cédula</b>", "<b>Correo</b>", "<b>Estado</b>"]]
+		data = [["<b>#</b>", "<b>Nombres</b>", "<b>Cédula</b>", "<b>Idioma</b>", "<b>Área</b>", "<b>Correo</b>", "<b>Estado</b>"]]
 
 		inscriptions = eva.inscriptions.sort_by{|h| h.user.last_name}
 
 		inscriptions.each_with_index do |e,i|
+			lan = e.language.description if e.language
+			area = e.area.description if e.area
 			data << [i+1, 
 			e.user.inverse_name,
 			e.user_id,
+			lan,
+			area,
 			e.user.email,
 			e.status.titleize
 			]	
