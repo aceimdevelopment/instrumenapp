@@ -119,7 +119,7 @@ class EvaluationsController < ApplicationController
   # DELETE /evaluations/1
   # DELETE /evaluations/1.json
   def destroy
-    @evaluation.area_courses.delete_all
+    @evaluation.area_courses.delete_all if @evaluation.is_a? Course
     @evaluation.destroy
     flash[:info] = "¡Evaluación Eliminada!"
     redirect_back fallback_location: evaluations_path
