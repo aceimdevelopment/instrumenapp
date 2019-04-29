@@ -22,7 +22,7 @@ class DownloadController < ApplicationController
 		ins = Inscription.find params[:id]
 		if ins.aprobado?
 			pdf = Pdf.make_doc_approval params[:id]
-			unless send_data pdf.render, filename: "list_evaluacion_#{params[:id].to_s}.pdf", type: "application/pdf", disposition: "attachment"
+			unless send_data pdf.render, filename: "constacia_aprobacion_#{params[:id].to_s}.pdf", type: "application/pdf", disposition: "attachment"
 				flash[:error] = "En estos momentos no se pueden descargar el archivo solicitado, intentelo más tarde."
 			end
 		else

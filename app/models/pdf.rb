@@ -216,16 +216,16 @@ class Pdf
 	# -------- FIN PLANILLA INSCRIPCIÓN DE ACEIM -------- #
 
 
-	def self.encabezado_central_con_logo_low pdf, no_cursos = true
+	def self.encabezado_central_con_logo_low pdf, cursos = true
 
 		logo_ucv = "app/assets/images/logo_ucv.png"
 		logo_fhe = "app/assets/images/logo_fhe.png"
 		logo_eim = "app/assets/images/logo_eim.jpg"
 
 
-		data = [[{image: logo_fhe, scale: 0.3, position: :center}, {image: logo_ucv, scale: 0.3, position: :center}, {image: logo_eim, scale: 0.3, position: :center}]]
+		data = [[{image: logo_fhe, scale: 0.3, position: :center}, {image: logo_ucv, scale: 0.3, position: :center, :padding => [0, 0, 0, 20]}, {image: logo_eim, scale: 0.3, position: :center}]]
 
-		t = pdf.make_table(data, width: 540, position: :center, cell_style: { inline_format: true, size: 9, align: :center, padding: 3, border_color: 'FFFFFF'})
+		t = pdf.make_table(data, width: 540, position: :center, cell_style: { inline_format: true, size: 9, align: :center, border_color: 'FFFFFF'})
 
 		t.draw
 
@@ -236,7 +236,7 @@ class Pdf
 		pdf.move_down 3
 	    pdf.text "ESCUELA DE IDIOMAS MODERNOS", align: :center, size: 9
 		pdf.move_down 3
-		if no_cursos
+		if cursos
 			pdf.text "Cursos de Postgrado EIM-UCV", align: :center, size: 9
 		end
 		pdf.move_down 3
