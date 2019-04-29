@@ -18,6 +18,16 @@ class Inscription < ApplicationRecord
   scope :pendents, -> {where('status = 0 || status = 1')}
 
 
+  def status_like_pass
+    if self.aprobado?
+      'aprobó'
+    elsif self.aplazado?
+      'aplazó'
+    else
+      'sin información'
+    end
+  end
+
   def link_title
     if self.test?
       "Prueba de Dominio Instrumental de Idiomas Extranjeros para Postgrado"

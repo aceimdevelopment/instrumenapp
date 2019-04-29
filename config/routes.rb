@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     member do 
       get 'make_inscription'
       get 'make_evaluation_list'
+      get 'make_doc_approval'
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

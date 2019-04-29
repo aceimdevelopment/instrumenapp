@@ -62,7 +62,7 @@
 
           - if ins.aprobado?
             %td
-              = link_to '#', class: 'btn btn-xs btn-primary' do
+              = link_to make_doc_approval_download_path(ins.id), class: 'btn btn-xs btn-primary tooltip-btn', 'data-toggle': :tooltip, title: 'Descargar Constancia de Aprobación Preinscripción', target: "_blank"  do
                 %i.fa.fa-download
                 Constancia de Aprobación
 

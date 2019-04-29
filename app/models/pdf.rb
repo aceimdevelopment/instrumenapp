@@ -98,6 +98,51 @@ class Pdf
 		return pdf
 	end
 
+
+	def self.make_doc_approval inscription_id
+		# Variable Locales
+		inscription = Inscription.find inscription_id
+		student = inscription.user
+
+		pdf = Prawn::Document.new(top_margin: 50, left_margin: 70, right_margin: 70)
+
+		#titulo
+		encabezado_central_con_logo_low pdf#, "Planilla de Inscripción (Sede Ciudad Universitaria)"
+
+		pdf.move_down 50
+
+		pdf.text "<u>CONSTANCIA</u>", size: 12, inline_format: true, align: :center
+
+		pdf.move_down 20
+
+		pdf.text "Quien suscribe, profesor  <i><b>LUCIUS DANIEL</b></i>, Director de la Escuela de Idiomas Modernos de la Facultad de Humanidades y Educación de la Universidad Central de Venezuela, hace constar por medio de la presente  que  la/el ciudadano (a) <b>#{student.inverse_name}</b>,  titular  de la cédula de identidad <b> C.I.: #{student.id}</b>, <b>#{inscription.status_like_pass}</b> el examen de suficiencia  para la  consulta bibliográfica y el uso instrumental del idioma : <b>#{inscription.language.description.upcase}</b> en el área de <b>#{inscription.area.description.upcase}</b>.", size: 11, inline_format: true, align: :justify, leading: 10, indent_paragraphs: 20
+
+		pdf.move_down 20
+		date = I18n.l(Date.today, format: 'Constancia que se expide en Caracas a los %d día(s) del mes de %B de %Y.')
+
+		pdf.text date, size: 11, inline_format: true, align: :justify
+		
+		if inscription.test? and inscription.evaluation
+			pdf.move_down 30
+			pdf.text "Fecha  de presentación de la prueba: <b>#{inscription.evaluation.start_to_local '%A, %d de %B de %Y' }</b>", size: 11, inline_format: true
+		end
+		
+		pdf.move_down 100
+		pdf.text "Prof. Lucius Daniel", size: 11, inline_format: true, align: :center
+		pdf.text "Director", size: 11, inline_format: true, align: :center
+
+		pdf.move_down 30
+		pdf.text '<b>Nota: esta constancia tiene una vigencia de dos años a partir del momento en que se presentó la prueba.</b>', size: 10, inline_format: true, align: :justify
+
+		pdf.text_box('Al contestar, se agradece hacer referencia al número y fecha de esta comunicación.
+     Ciudad Universitaria, Galpones N° 7, frente a Farmacia. Telefax: 6052924',
+ at: [0, 30], size: 9, align: :center)
+
+
+		return pdf
+	end
+
+
 	# -------- PLANILLA INSCRIPCIÓN DE ACEIM -------- #
 	private
 
