@@ -22,7 +22,10 @@
   - @inscriptions = @evaluation.inscriptions.joins(:user).order('last_name ASC')
   = form_tag qualify_evaluation_path, id: 'qualify_form' do
     = render file: '/inscriptions/index'
-
+%br
+%br
+%br
+%br
 :javascript
 
   function change_eva(url, type, id = '', location = '', schedule_id = '', cost = '', title= '', start='', edit = false){
