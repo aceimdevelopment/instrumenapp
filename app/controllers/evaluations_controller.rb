@@ -13,7 +13,7 @@ class EvaluationsController < ApplicationController
     @evaluation.type = 'Course'
 
     if params[:type].eql? 'test'
-      @inscriptions = Inscription.test.pendents.joins(:user).order('last_name DESC')
+      @inscriptions = Inscription.test.pendents.joins(:user).order('last_name ASC')
       @schedules = Schedule.prueba
       @title = "Pruebas"
       @evaluation.type = 'Test'
@@ -33,7 +33,7 @@ class EvaluationsController < ApplicationController
     elsif params[:type].eql? 'course'
       @evaluation.type = 'Course'
       @title = "Cursos"
-      @inscriptions = Inscription.course.pendents.joins(:user).order('last_name DESC')
+      @inscriptions = Inscription.course.pendents.joins(:user).order('last_name ASC')
       @actives = Course.activa
       @schedules = Schedule.curso
     else

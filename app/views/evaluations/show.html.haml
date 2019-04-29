@@ -19,7 +19,7 @@
 
 - if @evaluation.inscriptions.any?
   %h2 Participantes:
-  - @inscriptions = @evaluation.inscriptions
+  - @inscriptions = @evaluation.inscriptions.joins(:user).order('last_name ASC')
   = form_tag qualify_evaluation_path, id: 'qualify_form' do
     = render file: '/inscriptions/index'
 
