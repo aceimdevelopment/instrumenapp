@@ -107,15 +107,15 @@ class Pdf
 		pdf = Prawn::Document.new(top_margin: 50, left_margin: 70, right_margin: 70)
 
 		#titulo
-		encabezado_central_con_logo_low pdf#, "Planilla de Inscripción (Sede Ciudad Universitaria)"
+		encabezado_central_con_logo_low pdf, false #"Planilla de Inscripción (Sede Ciudad Universitaria)"
 
 		pdf.move_down 50
 
 		pdf.text "<u>CONSTANCIA</u>", size: 12, inline_format: true, align: :center
 
-		pdf.move_down 20
+		pdf.move_down 30
 
-		pdf.text "Quien suscribe, profesor  <i><b>LUCIUS DANIEL</b></i>, Director de la Escuela de Idiomas Modernos de la Facultad de Humanidades y Educación de la Universidad Central de Venezuela, hace constar por medio de la presente  que  la/el ciudadano (a) <b>#{student.inverse_name}</b>,  titular  de la cédula de identidad <b> C.I.: #{student.id}</b>, <b>#{inscription.status_like_pass}</b> el examen de suficiencia  para la  consulta bibliográfica y el uso instrumental del idioma : <b>#{inscription.language.description.upcase}</b> en el área de <b>#{inscription.area.description.upcase}</b>.", size: 11, inline_format: true, align: :justify, leading: 10, indent_paragraphs: 20
+		pdf.text "Quien suscribe, profesor  <i><b>LUCIUS DANIEL</b></i>, Director de la Escuela de Idiomas Modernos de la Facultad de Humanidades y Educación de la Universidad Central de Venezuela, hace constar por medio de la presente  que  la/el ciudadano (a) <b>#{student.inverse_name}</b>,  titular  de la cédula de identidad <b> C.I.: #{student.id}</b>, <b>#{inscription.status_like_pass}</b> el examen de suficiencia  para la  consulta bibliográfica y el uso instrumental del idioma : <b>#{inscription.language.description.upcase}</b> en el área de <b>#{inscription.area.description.upcase}</b>.", size: 11, inline_format: true, align: :justify, leading: 10
 
 		pdf.move_down 20
 		date = I18n.l(Date.today, format: 'Constancia que se expide en Caracas a los %d día(s) del mes de %B de %Y.')
@@ -124,7 +124,7 @@ class Pdf
 		
 		if inscription.test? and inscription.evaluation
 			pdf.move_down 30
-			pdf.text "Fecha  de presentación de la prueba: <b>#{inscription.evaluation.start_to_local '%A, %d de %B de %Y' }</b>", size: 11, inline_format: true
+			pdf.text "Fecha  de presentación de la prueba: <b>#{inscription.evaluation.start_to_local('%A, %d de %B de %Y').downcase }.</b>", size: 11, inline_format: true
 		end
 		
 		pdf.move_down 100
@@ -216,7 +216,7 @@ class Pdf
 	# -------- FIN PLANILLA INSCRIPCIÓN DE ACEIM -------- #
 
 
-	def self.encabezado_central_con_logo_low pdf
+	def self.encabezado_central_con_logo_low pdf, no_cursos = true
 
 		logo_ucv = "app/assets/images/logo_ucv.png"
 		logo_fhe = "app/assets/images/logo_fhe.png"
@@ -236,7 +236,9 @@ class Pdf
 		pdf.move_down 3
 	    pdf.text "ESCUELA DE IDIOMAS MODERNOS", align: :center, size: 9
 		pdf.move_down 3
-		pdf.text "Cursos de Postgrado EIM-UCV", align: :center, size: 9
+		if no_cursos
+			pdf.text "Cursos de Postgrado EIM-UCV", align: :center, size: 9
+		end
 		pdf.move_down 3
 
 		# return pdf
