@@ -78,7 +78,7 @@ class InscriptionsController < ApplicationController
     if @inscription.save
       flash[:success] = '¡Inscripción confirmada!'
     else
-      flash[:error] = "Error: #{@inscription.erros.full_messages.to_sentence}"
+      flash[:error] = "Error: #{@inscription.errors.full_messages.to_sentence}"
     end
 
 

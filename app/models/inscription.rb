@@ -8,7 +8,15 @@ class Inscription < ApplicationRecord
   enum status: [:preinscrito, :inscrito, :aprobado, :aplazado]
 
 
-  validates_uniqueness_of :language_id, scope: [:area_id, :user_id, :evatype], message: 'El estudiante ya está inscrito en la evaluación. Ingrese a su sessión y consulte las opciones'
+  validates_uniqueness_of :language_id, scope: [:area_id, :user_id, :evatype], message: 'Ya se se encuentra (pre)inscrita(o) en la evaluación indicada. Porfavor, ingrese a su sessión y consulte las opciones', if: :same_inscription
+
+
+  def same_inscription
+
+    evatype_value = Inscription.evatypes[self.evatype]
+    self.new_record? and (Inscription.where("language_id = ? and area_id = ? and user_id = ? and evatype = ? and (status = 0 or status = 1)", self.language_id, self.area_id, self.user_id, evatype_value).count > 0)
+    
+  end
 
   enum evatype: [:course, :test]
 
