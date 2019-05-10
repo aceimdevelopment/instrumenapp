@@ -22,7 +22,8 @@ class EvaluationsController < ApplicationController
       @evaluation.schedule_id = GeneralParameter.horario_prueba.value if GeneralParameter.horario_prueba
       @evaluation.location = GeneralParameter.ubicacion_prueba.value if GeneralParameter.ubicacion_prueba
       begin
-        Test.check_actives_tests
+        flash[:success] = "Creada Prueba automática" if Test.check_actives_tests
+        
       rescue Exception => e
         flash[:danger] = 'No se pudo revisar la creación de Pruebas automáticas'
       end

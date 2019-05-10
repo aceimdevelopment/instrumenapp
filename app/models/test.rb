@@ -1,13 +1,13 @@
 class Test < Evaluation
 
-	scope :active_test_next_saturday, -> {where("start > #{self.next_saturday_test}")}
+	scope :active_test_next_saturday, -> {where("start >= '#{self.next_saturday_test}'")}
 
 	def self.check_actives_tests
-		self.generate_next_test if self.active_test_next_saturday?
+		generate_next_test if activa.active_test_next_saturday.count < 1 #active_test_next_saturday?
 	end
 
 	def self.active_test_next_saturday?
-		self.activa.where("start > #{self.next_saturday_test}").count < 1
+		activa.active_test_next_saturday.count < 1
 	end
 
 	def self.generate_next_test
@@ -15,7 +15,7 @@ class Test < Evaluation
         elem = Test.new
         cost = GeneralParameter.costo_prueba.value
         schedule = GeneralParameter.horario_prueba.value
-        location = GeneralParameter.ubicacion_prueba
+        location = GeneralParameter.ubicacion_prueba.value
 
         elem.start = self.next_saturday_test
         elem.cost = cost
