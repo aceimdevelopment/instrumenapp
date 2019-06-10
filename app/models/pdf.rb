@@ -128,7 +128,7 @@ class Pdf
 		end
 		
 		pdf.move_down 100
-		pdf.text "Prof. Lucius Daniel", size: 11, inline_format: true, align: :center
+		pdf.text "Prof. Carlos Saavedra", size: 11, inline_format: true, align: :center
 		pdf.text "Director", size: 11, inline_format: true, align: :center
 
 		pdf.move_down 30
