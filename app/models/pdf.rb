@@ -115,7 +115,7 @@ class Pdf
 
 		pdf.move_down 30
 
-		pdf.text "Quien suscribe, profesor  <i><b>LUCIUS DANIEL</b></i>, Director de la Escuela de Idiomas Modernos de la Facultad de Humanidades y Educación de la Universidad Central de Venezuela, hace constar por medio de la presente  que  la/el ciudadano (a) <b>#{student.inverse_name}</b>,  titular  de la cédula de identidad <b> C.I.: #{student.id}</b>, <b>#{inscription.status_like_pass}</b> el examen de suficiencia  para la  consulta bibliográfica y el uso instrumental del idioma : <b>#{inscription.language.description.upcase}</b> en el área de <b>#{inscription.area.description.upcase}</b>.", size: 11, inline_format: true, align: :justify, leading: 10
+		pdf.text "Quien suscribe, profesor  <i><b>Carlos A. Saavedra A.</b></i>, Director de la Escuela de Idiomas Modernos de la Facultad de Humanidades y Educación de la Universidad Central de Venezuela, hace constar por medio de la presente  que  la/el ciudadano (a) <b>#{student.inverse_name}</b>,  titular  de la cédula de identidad <b> C.I.: #{student.id}</b>, <b>#{inscription.status_like_pass}</b> el examen de suficiencia  para la  consulta bibliográfica y el uso instrumental del idioma : <b>#{inscription.language.description.upcase}</b> en el área de <b>#{inscription.area.description.upcase}</b>.", size: 11, inline_format: true, align: :justify, leading: 10
 
 		pdf.move_down 20
 		date = I18n.l(Date.today, format: 'Constancia que se expide en Caracas a los %d día(s) del mes de %B de %Y.')
